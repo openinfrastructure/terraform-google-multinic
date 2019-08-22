@@ -1,0 +1,39 @@
+#! /bin/bash
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Display a report of route resources and instances
+
+set -e
+set -u
+: ${fields:="creationTimestamp, name, destRange, priority, warnings"}
+: ${filter:="name~^vpc-link-"}
+: ${group:="$(gcloud compute instance-groups list --filter='name~^vpc-link' --format='value(name)')"}
+
+echo
+echo "INSTANCES"
+gcloud compute instances list --filter="${filter}" --format="table(creationTimestamp, name, zone, status)" --project $SERVICE_PROJECT
+
+echo
+echo "INSTANCE GROUP INSTANCES"
+gcloud compute instance-groups list-instances --zone "${ZONE}" "${group}"
+gcloud compute instance-groups managed describe --zone "${ZONE}" "${group}" --format="flattened(status.isStable, currentActions)"
+
+echo
+echo "SERVICE PROJECT ROUTES"
+gcloud compute routes list --filter="${filter}" --format="table(${fields})" --project $SERVICE_PROJECT
+
+echo
+echo "HOST PROJECT ROUTES"
+gcloud compute routes list --filter="${filter}" --format="table(${fields})" --project $HOST_PROJECT

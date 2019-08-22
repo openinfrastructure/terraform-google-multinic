@@ -1,0 +1,63 @@
+#! /bin/bash
+#
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Create endpoint instances with network testing tools in APP_SUBNET and
+# CORE_SUBNET so communication between the endpoints is routed through the
+# vpc-link IP router instances.
+
+set -u
+
+: "${NUM_INSTANCES:=1}"
+: "${ZONE:=us-central1-a}"
+: "${MACHINE_TYPE:=n1-standard-4}"
+
+# The name of one of the subnets listed in app_subnet_cidrs.
+: "${APP_NETWORK:=default}"
+: "${APP_SUBNET:=default}"
+# The name of one of the subnets listed in core_subnet_cidrs
+: "${CORE_NETWORK:=default}"
+: "${CORE_SUBNET:=default}"
+# Used to allow traffic through the firewall.
+: "${TAGS:=ssh,icmp,http,vpc-link-endpoint}"
+
+: "${IMAGE_PROJECT:=centos-cloud}"
+: "${IMAGE_FAMILY:=centos-7}"
+
+for i in $(seq "${NUM_INSTANCES}"); do
+  gcloud compute --project="${SERVICE_PROJECT}" instances create \
+    --machine-type="${MACHINE_TYPE}" \
+    --image-project="${IMAGE_PROJECT}" \
+    --image-family="${IMAGE_FAMILY}" \
+    --zone="${ZONE}" \
+    --network-interface="no-address,network=${APP_NETWORK},subnet=${APP_SUBNET}" \
+    --tags="${TAGS}" \
+    --no-service-account \
+    --no-scopes \
+    "endpoint-vpc-link-local-vpc-${i}"
+done
+
+for i in $(seq "${NUM_INSTANCES}"); do
+  gcloud compute --project="${SERVICE_PROJECT}" instances create \
+    --machine-type="${MACHINE_TYPE}" \
+    --image-project=centos-cloud \
+    --image-family=centos-7 \
+    --zone="${ZONE}" \
+    --network-interface="no-address,subnet=projects/${HOST_PROJECT}/regions/${ZONE%-*}/subnetworks/${CORE_SUBNET}" \
+    --tags="${TAGS}" \
+    --no-service-account \
+    --no-scopes \
+    "endpoint-vpc-link-shared-vpc-${i}"
+done
