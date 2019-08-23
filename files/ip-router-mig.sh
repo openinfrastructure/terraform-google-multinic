@@ -141,8 +141,6 @@ program_routes() {
   # The second NIC is in the App project and VPC networ
   core_ip="$(stdlib::metadata_get -k instance/network-interfaces/0/ip)"
 
-  # TODO: Delete routes before creating them
-
   ## Routes from APP to CORE
   IFS=',' read -ra ary <<< "${CORE_CIDRS}"
   idx=0
@@ -210,14 +208,42 @@ configure_policy_routing() {
   return 0
 }
 
+##
+# Delete routes matching this instances name but not this instances ID.  Routes
+# associated with the instance name but not the ID are invalid, left over from
+# a previous instance which has been auto-healed.  Such routes should be
+# removed as quickly as possible to avoid traffic being sent to an invalid
+# next-hop, which results in dropped packets.
+delete_stale_routes() {
+  local instance_id instance_name routes_list route
+  instance_id="$(stdlib::metadata_get -k instance/id)"
+  instance_name="$(stdlib::metadata_get -k instance/name)"
+  routes_list="$(mktemp)"
+
+  gcloud compute routes list \
+    --project="${CORE_PROJECT}" \
+    --filter="name~^${instance_name} AND NOT name~^${instance_name}-${instance_id}" \
+    --format='value(name)' > "${routes_list}"
+
+  while read -r route; do
+    cmd gcloud compute routes delete --project="${CORE_PROJECT}" "${route}" &
+  done < "${routes_list}"
+
+  gcloud compute routes list \
+    --project="${APP_PROJECT}" \
+    --filter="name~^${instance_name} AND NOT name~^${instance_name}-${instance_id}" \
+    --format='value(name)' > "${routes_list}"
+
+  while read -r route; do
+    cmd gcloud compute routes delete --project="${APP_PROJECT}" "${route}" &
+  done < "${routes_list}"
+
+  wait
+}
+
 if ! setup_sysctl; then
   error "Failed to configure ip forwarding via sysctl, aborting."
   exit 1
-fi
-
-if ! setup_status_api; then
-  error "Failed to configure status API, aborting."
-  exit 2
 fi
 
 if ! configure_policy_routing; then
@@ -225,6 +251,17 @@ if ! configure_policy_routing; then
   exit 3
 fi
 info "Configured Policy Routing as per https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing"
+
+if ! delete_stale_routes; then
+  error "Failed to delete stale routes, aborting"
+  exit 4
+fi
+info "Configured Policy Routing as per https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing"
+
+if ! setup_status_api; then
+  error "Failed to configure status API, aborting."
+  exit 2
+fi
 
 if ! program_routes; then
   error "Failed to configure routes in VPC networks, aboirting."
