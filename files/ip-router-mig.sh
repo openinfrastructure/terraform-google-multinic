@@ -241,37 +241,69 @@ delete_stale_routes() {
   wait
 }
 
-if ! setup_sysctl; then
-  error "Failed to configure ip forwarding via sysctl, aborting."
-  exit 1
+main() {
+  if ! setup_sysctl; then
+    error "Failed to configure ip forwarding via sysctl, aborting."
+    exit 1
+  fi
+
+  if ! configure_policy_routing; then
+    error "Failed to configure local routing table, aborting"
+    exit 3
+  fi
+  info "Configured Policy Routing as per https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing"
+
+  if ! delete_stale_routes; then
+    error "Failed to delete stale routes, aborting"
+    exit 4
+  fi
+  info "Configured Policy Routing as per https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing"
+
+  if ! setup_status_api; then
+    error "Failed to configure status API, aborting."
+    exit 2
+  fi
+
+  if ! program_routes; then
+    error "Failed to configure routes in VPC networks, aboirting."
+    exit 9
+  fi
+
+  # Nice to have packages
+  yum -y install tcpdump mtr tmux
+
+  # Install panic trigger
+  install_kpanic_service
+}
+
+# To make this easier to execute interactively during development, load stdlib
+# from the metadata server.  When the instance boots normally stdlib will load
+# this script via startup-script-custom.  As a result, only use this function
+# outside of the normal startup-script behavior, e.g. when developing and
+# testing interactively.
+load_stdlib() {
+  local tmpfile
+  tmpfile="$(mktemp)"
+  if ! curl --silent --fail -H 'Metadata-Flavor: Google' -o "${tmpfile}" \
+    http://metadata/computeMetadata/v1/instance/attributes/startup-script; then
+    error "Could not load stdlib from metadata instance/attributes/startup-script"
+    return 1
+  fi
+  # shellcheck disable=1090
+  source "${tmpfile}"
+}
+
+# If the script is being executed directly, e.g. when running interactively,
+# initialize stdlib.  Note, when running via the google_metadata_script_runner,
+# this condition will be false because the stdlib sources this script via
+# startup-script-custom.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  TMPDIR="/tmp/startup"
+  [[ -d "${TMPDIR}" ]] || mkdir -p "${TMPDIR}"
+  load_stdlib
+  stdlib::init
+  stdlib::load_config_values
 fi
 
-if ! configure_policy_routing; then
-  error "Failed to configure local routing table, aborting"
-  exit 3
-fi
-info "Configured Policy Routing as per https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing"
-
-if ! delete_stale_routes; then
-  error "Failed to delete stale routes, aborting"
-  exit 4
-fi
-info "Configured Policy Routing as per https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing"
-
-if ! setup_status_api; then
-  error "Failed to configure status API, aborting."
-  exit 2
-fi
-
-if ! program_routes; then
-  error "Failed to configure routes in VPC networks, aboirting."
-  exit 9
-fi
-
-# Nice to have packages
-yum -y install tcpdump mtr tmux
-
-# Install panic trigger
-install_kpanic_service
-
+main "$@"
 # vim:sw=2
