@@ -5,6 +5,12 @@ This module links two vpc networks using IP router instances with a Managed
 Instance Group.  The startup and shutdown script is responsible for creating
 and deleting route resources in each VPC network.
 
+A detailed description of how ECMP routing works with this solution is provided
+in the [ECMP][ecmp] document.
+
+A detailed analysis of failure and recovery modes is provided in the
+[RECOVERY][recovery] document.
+
 Logging
 ===
 
@@ -200,3 +206,5 @@ packets.
 [policy-routing]: https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing
 [rhel-net-tune]: https://access.redhat.com/sites/default/files/attachments/20150325_network_performance_tuning.pdf
 [policy-routing]: https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing
+[ecmp]: ECMP.md
+[recovery]: RECOVERY.md
