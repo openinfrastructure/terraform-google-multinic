@@ -194,6 +194,77 @@ route resources are cleaned up before the instance is terminated.  Route
 resources which are not terminated enter an invalid state a short (1 to 2
 minutes) time after the instance is terminated.
 
+Benchmarking
+===
+
+Due to [VPC Network Limits][vpc-network-limits] in GCP, the number of link instances in the Managed Instance Group will determine the total bandwidth available between the VPCs. These are different than quotas in that they cannot be changed. To test these limits, metrics are provided using [iPerf2](iperf.fr).
+
+| Item | Limit | Notes |
+|----|----|----|
+| Maximum ingress data rate | Depends on machine type | GCP does not artificially cap VM instance inbound or ingresstraffic. VMs are allowed to receive as much traffic as resources and network conditions allow. For purposes of capacity planning, you should assume that each VM instance can handle no more than 10 Gbps of external Internet traffic. This value is an approximation, is not covered by an SLA, and is subject to change. Adding Alias IP addresses or multiple network interfaces to a VM does not increase its ingress capacity. |
+| Maximum egress data rate | Depends on the machine type of the VM: <br> <ul><li>All shared-core machine types are limited to 1 Gbps.</li><li>2 Gbps per vCPU, up to 32 Gbps per VM for machine types that use the Skylake CPU platform with 16 or more vCPUs. This egress rate is also available for ultramem machine types.</li><li>2 Gbps per vCPU, up to 16 Gbps per VM for all other machine types with eight or more vCPUs.</li></ul>| Egress traffic is the total outgoing bandwidth shared among all network interfaces of a VM. It includes data transfer to persistent disks connected to the VM. |
+
+## Tests
+
+### Client
+`iperf -c <INTERNAL IP ADDRESS> -P 100 -t 60`
+`-c` Run as client 
+`-P` Run multiple clients (If it’s run with one client, all traffic will go through 1 VM)
+`-t` seconds to run test (Allow a large number to average out results)
+
+### Server
+`iperf -s`
+`-s` Run as Server
+
+### Descriptions
+- Client VM - A Test VM inside the Service Project in a Local VPC.
+- Server VM - A Test VM inside the host project inside a Subnet of the Shared VPC
+- Link VM - A VM used to Route Traffic between VPCs, lives inside the Service Project.
+- Potential Bandwidth - Limits according to the above chart from the GCP Documentation
+- Actual bandwidth Output of the tests run by iperf. 
+  - These results are consolidated into a single number if there are multiple clients/servers running at once.
+
+__Test 1__
+
+<!--TODO: Make this into a table, not sure of the format -->
+3 Link VMs 8vCPU each - Potential Egress 16 Gbps Each  
+2 Client VMs 16 vCPU each - Multi-Stream Clients  
+2 Server VMs 16 vCPU Each  
+
+Client 1 to Server 1 - 24.4 Gbps  
+Client 2 to Server 2 - 22.4 Gbps  
+Simultaneously  
+
+Potential Bandwidth - 48 Gbps  
+Actual Bandwidth - 46.8 Gbps  
+
+__Test 2__
+
+1 Link VM 16vCPU - Potential Egress 32 Gbps  
+1 Client VM 16vCPU - Multi-Stream Clients  
+1 Server VM 16vCPU  
+
+Potential Bandwidth - 32 Gbps  
+Actual Bandwidth - 30.2 Gbps  
+
+__Test 3__
+
+1 Link VM 8vCPU - Potential Egress 16 Gbps  
+1 Client VM 16vCPU Multi-Stream Client  
+1 Server VM 16vCPU  
+
+Potential Bandwidth - 16 Gbps  
+Actual Bandwidth - 14.3 Gbps  
+
+__Test 4__
+
+1 Link VM 8vCPU - Potential Egress 16 Gbps  
+1 Client VM 16 vCPU Single-Stream Client  
+1 Server VM 16 vCPU  
+
+Potential Bandwidth - 16 Gbps  
+Actual Bandwidth - 13.4 Gbps
+
 References
 ===
 
@@ -205,6 +276,6 @@ packets.
 
 [policy-routing]: https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing
 [rhel-net-tune]: https://access.redhat.com/sites/default/files/attachments/20150325_network_performance_tuning.pdf
-[policy-routing]: https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing
+[vpc-network-limits]: https://cloud.google.com/vpc/docs/quota#per_instance
 [ecmp]: ECMP.md
 [recovery]: RECOVERY.md
