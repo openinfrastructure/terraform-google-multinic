@@ -207,8 +207,8 @@ configure_policy_routing() {
   gateway="$(stdlib::metadata_get -k instance/network-interfaces/1/gateway)"
   # NOTE: dhclient clears out this
   # Clear all rules associated with rt1 to prevent rules from building up
-  ip rule | grep 'table rt1' | cut -d: -f1 \
-    | xargs -n1 sudo ip rule del pref
+  ip rule | grep 'lookup rt1' | cut -d: -f1 \
+    | xargs --no-run-if-empty -n1 sudo ip rule del pref
   cmd ip route add "${APP_SUBNET_CIDR}" src "${ip}" dev eth1 table rt1
   cmd ip route add default via "${gateway}" dev eth1 table rt1
   # NOTE: These route rules are not cleared by dhclient, they persist.
