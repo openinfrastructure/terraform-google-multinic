@@ -198,22 +198,48 @@ program_routes() {
 # through the correct interface. In such cases, you must configure a separate
 # routing table for each network interface using policy routing.
 #
+# There are two major policies in play:
+#  1. Traffic from an IP associated with a NIC, either the primary or an ILB.
+#  2. Routed traffic, e.g. ingress into nic0 and egress nic1.
 configure_policy_routing() {
   local ary app_cidr ip gateway
-  if ! grep -qx '1 rt1' /etc/iproute2/rt_tables; then
-    echo "1 rt1" >> /etc/iproute2/rt_tables
+
+  # These tables manage default routes based on policy.
+  if ! grep -qx '10 nic0.out' /etc/iproute2/rt_tables; then
+    echo "10 nic0.out" >> /etc/iproute2/rt_tables
   fi
-  ip="$(stdlib::metadata_get -k instance/network-interfaces/1/ip)"
-  gateway="$(stdlib::metadata_get -k instance/network-interfaces/1/gateway)"
+  if ! grep -qx '11 nic1.out' /etc/iproute2/rt_tables; then
+    echo "11 nic1.out" >> /etc/iproute2/rt_tables
+  fi
+
+  ip0="$(stdlib::metadata_get -k instance/network-interfaces/0/ip)"
+  gateway0="$(stdlib::metadata_get -k instance/network-interfaces/0/gateway)"
+  netmask0="$(stdlib::metadata_get -k instance/network-interfaces/0/subnetmask)"
+  ip1="$(stdlib::metadata_get -k instance/network-interfaces/1/ip)"
+  gateway1="$(stdlib::metadata_get -k instance/network-interfaces/1/gateway)"
+  netmask1="$(stdlib::metadata_get -k instance/network-interfaces/1/subnetmask)"
+
   # NOTE: dhclient clears out this
   # Clear all rules associated with rt1 to prevent rules from building up
-  ip rule | grep 'lookup rt1' | cut -d: -f1 \
-    | xargs --no-run-if-empty -n1 sudo ip rule del pref
-  cmd ip route add "${APP_SUBNET_CIDR}" src "${ip}" dev eth1 table rt1
-  cmd ip route add default via "${gateway}" dev eth1 table rt1
+  ip rule | grep 'lookup nic' | cut -d: -f1 \
+    | xargs --no-run-if-empty -n1 ip rule del pref
+
+  # Traffic from nic0 primary interface (TODO: Add ILB here)
+  cmd ip route add "${ip0}/${netmask0}" src "${ip0}" dev eth0 table nic0.out
+  cmd ip route add "${ip0}/${netmask0}" src "${ip0}" dev eth0 table nic1.out
+  # Traffic from nic1 primary interface (TODO: Add ILB here)
+  cmd ip route add "${ip1}/${netmask1}" src "${ip1}" dev eth0 table nic0.out
+  cmd ip route add "${ip1}/${netmask1}" src "${ip1}" dev eth0 table nic1.out
+  # Default traffic
+  cmd ip route add default via "${gateway0}" dev eth0 table nic0.out
+  cmd ip route add default via "${gateway1}" dev eth1 table nic1.out
+
   # NOTE: These route rules are not cleared by dhclient, they persist.
-  cmd ip rule add from "${ip}/32" table rt1
-  cmd ip rule add to "${ip}/32" table rt1
+  cmd ip rule add from "${ip0}/32" table nic0.out
+  cmd ip rule add to "${ip0}/32" table nic0.out
+
+  cmd ip rule add from "${ip1}/32" table nic1.out
+  cmd ip rule add to "${ip1}/32" table nic1.out
 
   IFS=',' read -ra ary <<< "${APP_CIDRS}"
   for app_cidr in "${ary[@]}"; do
@@ -224,39 +250,6 @@ configure_policy_routing() {
   info "Finished configuring policy routing rules"
   cmd ip rule
   return 0
-}
-
-##
-# Delete routes matching this instances name but not this instances ID.  Routes
-# associated with the instance name but not the ID are invalid, left over from
-# a previous instance which has been auto-healed.  Such routes should be
-# removed as quickly as possible to avoid traffic being sent to an invalid
-# next-hop, which results in dropped packets.
-delete_stale_routes() {
-  local instance_id instance_name routes_list route
-  instance_id="$(stdlib::metadata_get -k instance/id)"
-  instance_name="$(stdlib::metadata_get -k instance/name)"
-  routes_list="$(mktemp)"
-
-  gcloud compute routes list \
-    --project="${CORE_PROJECT}" \
-    --filter="name~^${instance_name} AND NOT name~^${instance_name}-${instance_id}" \
-    --format='value(name)' > "${routes_list}"
-
-  while read -r route; do
-    cmd gcloud compute routes delete --project="${CORE_PROJECT}" "${route}" &
-  done < "${routes_list}"
-
-  gcloud compute routes list \
-    --project="${APP_PROJECT}" \
-    --filter="name~^${instance_name} AND NOT name~^${instance_name}-${instance_id}" \
-    --format='value(name)' > "${routes_list}"
-
-  while read -r route; do
-    cmd gcloud compute routes delete --project="${APP_PROJECT}" "${route}" &
-  done < "${routes_list}"
-
-  wait
 }
 
 main() {
@@ -276,33 +269,22 @@ main() {
   fi
   info "Configured Policy Routing as per https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing"
 
-  if ! configure_dhclient_exit_hook; then
-    error "Failed to install /etc/dhcp/dhclient-exit-hooks.d/vpc-link.sh"
-    exit 1
-  fi
-  info "Installed /etc/dhcp/dhclient-exit-hooks.d/vpc-link.sh to restore policy routing on new DHCP lease"
+  # if ! configure_dhclient_exit_hook; then
+  #   error "Failed to install /etc/dhcp/dhclient-exit-hooks.d/vpc-link.sh"
+  #   exit 1
+  # fi
+  # info "Installed /etc/dhcp/dhclient-exit-hooks.d/vpc-link.sh to restore policy routing on new DHCP lease"
 
-  # Restart google-network-daemon to avoid race condition with dhclient eth1
-  systemctl restart google-network-daemon
-
-  if ! delete_stale_routes; then
-    error "Failed to delete stale routes, aborting"
-    exit 4
-  fi
-  info "Configured Policy Routing as per https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#configuring_policy_routing"
+  # # Restart google-network-daemon to avoid race condition with dhclient eth1
+  # systemctl restart google-network-daemon
 
   if ! setup_status_api; then
     error "Failed to configure status API, aborting."
     exit 2
   fi
 
-  if ! program_routes; then
-    error "Failed to configure routes in VPC networks, aboirting."
-    exit 9
-  fi
-
   # Nice to have packages
-  yum -y install tcpdump mtr tmux
+  # yum -y install tcpdump mtr tmux
 
   # Install panic trigger
   install_kpanic_service
@@ -414,4 +396,10 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   stdlib::load_config_values
 fi
 
+if [[ -z "${MULTINIC_DISABLE:-}" ]]; then
+  info "MULTINIC_DISABLE is set, exiting now."
+  exit 0
+fi
+
+main "$@"
 # vim:sw=2
