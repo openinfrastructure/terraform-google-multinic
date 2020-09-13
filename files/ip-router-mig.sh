@@ -414,5 +414,4 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   stdlib::load_config_values
 fi
 
-main "$@"
 # vim:sw=2
