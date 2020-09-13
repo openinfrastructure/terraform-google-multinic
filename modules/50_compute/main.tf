@@ -97,8 +97,13 @@ resource "google_compute_instance_group_manager" "multinic" {
   target_size = var.num_instances
 
   named_port {
-    name = "http"
-    port = "80"
+    name = "hc-health"
+    port = "9000"
+  }
+
+  named_port {
+    name = "hc-traffic"
+    port = "9001"
   }
 
   auto_healing_policies {

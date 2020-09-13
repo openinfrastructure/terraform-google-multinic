@@ -95,27 +95,68 @@ setup_sysctl() {
   info "IP Forwarding enabled via /etc/sysctl.d/98-ip-router.conf"
 }
 
-# Expose /bridge/status.json endpoint
-# TODO: Configure this as two systemd service units using python 3.7, which is
-# already on the system.  Two units to enable draining.
-# Maybe as simple as systemd-run /usr/bin/python -m SimpleHTTPServer 80
+# Configure two status check endpoints.  Port 9000 is used by the MIG for
+# auto-ealing.  Port 9001 is used by the Load Balancer forwarding rule backend
+# service to start or stop traffic forwarding to this instance.
+#
+# The startup script should configure routing and enable this service as
+# quickly as possible.
+#
+# Take an instance out of rotation by stopping hc-traffic.
+# Start the auto-healing process by stopping hc-health
 setup_status_api() {
   # Install status API
+  local status_file status_unit1 status_unit2
   status_file="$(mktemp)"
-  echo '{status: "OK"}' > "${status_file}"
+  echo '{status: "OK", host: "'"${HOSTNAME}"'"}' > "${status_file}"
+  install -v -o 0 -g 0 -m 0755 -d /var/lib/multinic/status
+  install -v -o 0 -g 0 -m 0644 "${status_file}" /var/lib/multinic/status/status.json
 
-  # Hack to wait for the network
-  while ! curl http://mirrorlist.centos.org/; do
-    info "Cannot curl mirrorlist.centos.org, sleeping 1 second..."
-    sleep 1
-  done
+  status_unit1="$(mktemp)"
+  cat <<EOF>"${status_unit1}"
+[Unit]
+Description=hc-health auto-healing endpoint (Instance is auto-healed if this unit is stopped)
+After=network.target
 
-  [[ -x /sbin/httpd ]] || yum -y install httpd
-  install -v -o 0 -g 0 -m 0755 -d /var/www/html/bridge
-  install -v -o 0 -g 0 -m 0644 "${status_file}" /var/www/html/bridge/status.json
+[Service]
+Type=simple
+User=nobody
+Group=nobody
+Restart=always
+WorkingDirectory=/var/lib/multinic/status
+ExecStart=@/usr/bin/python3 "/usr/bin/python3" "-m" "http.server" "9000"
+PrivateTmp=true
 
-  cmd systemctl enable httpd || return $?
-  cmd systemctl start httpd || return $?
+[Install]
+WantedBy=multi-user.target
+EOF
+  install -m 0644 -o 0 -g 0 "${status_unit1}" /etc/systemd/system/hc-health.service
+
+  status_unit2="$(mktemp)"
+  cat <<EOF>"${status_unit2}"
+[Unit]
+Description=hc-traffic load-balancing endpoint (Instance is taken out of service if this unit is stopped)
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+Group=nobody
+Restart=always
+WorkingDirectory=/var/lib/multinic/status
+ExecStart=@/usr/bin/python3 "/usr/bin/python3" "-m" "http.server" "9001"
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  install -m 0644 -o 0 -g 0 "${status_unit2}" /etc/systemd/system/hc-traffic.service
+
+  systemctl daemon-reload
+  systemctl restart hc-health.service
+  systemctl restart hc-traffic.service
+  systemctl enable hc-health.service
+  systemctl enable hc-traffic.service
 }
 
 # Install a oneshot systemd service to trigger a kernel panic.
@@ -203,11 +244,16 @@ EOF
   svcfile="$(mktemp)"
   cat <<EOF>"$svcfile"
 [Unit]
-Description=Enable policy routing for multinic
+Description=Configure policy routing
+After=network.target
 
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/policy-routing
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
 EOF
   install -m 0644 -o 0 -g 0 "$svcfile" /etc/systemd/system/policy-routing.service
   systemctl daemon-reload
@@ -231,7 +277,7 @@ main() {
   info "See: systemctl status policy-routing.service"
 
   if ! setup_status_api; then
-    error "Failed to configure status API, aborting."
+    error "Failed to configure status API endpoints, aborting."
     exit 2
   fi
 

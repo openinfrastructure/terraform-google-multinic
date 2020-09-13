@@ -62,7 +62,7 @@ module "multinic-a" {
   nic1_subnet  = local.nic1_subnet
   nic1_cidrs   = [local.nic1_netblock]
 
-  hc_self_link = google_compute_health_check.multinic.self_link
+  hc_self_link = google_compute_health_check.multinic-health.self_link
   service_account_email = "multinic@${local.project_id}.iam.gserviceaccount.com"
 }
 
@@ -86,13 +86,37 @@ module "multinic-b" {
   nic1_subnet  = local.nic1_subnet
   nic1_cidrs   = [local.nic1_netblock]
 
-  hc_self_link = google_compute_health_check.multinic.self_link
+  # Note this is the auto-healing check, not the traffic check
+  hc_self_link = google_compute_health_check.multinic-health.self_link
   service_account_email = "multinic@${local.project_id}.iam.gserviceaccount.com"
 }
 
-resource google_compute_health_check "multinic" {
+# The "health" health check is used for auto-healing with the MIG.  The
+# timeouts are longer to reduce the risk of removing an otherwise healthy
+# instance.
+resource google_compute_health_check "multinic-health" {
   project = local.project_id
-  name    = "multinic-http"
+  name    = "multinic-health"
+
+  check_interval_sec  = 10
+  timeout_sec         = 5
+  healthy_threshold   = 2
+  unhealthy_threshold = 3
+
+  http_health_check {
+    port         = 9000
+    request_path = "/status.json"
+  }
+}
+
+# The "traffic" health check is used by the load balancer.  The instance will
+# be taken out of service if the health check fails and other instances have
+# passing traffic checks.  This check is more agressive so that the a
+# preemptible instance is able to take itself out of rotation within the 30
+# second window provided for shutdown.
+resource google_compute_health_check "multinic-traffic" {
+  project = local.project_id
+  name    = "multinic-traffic"
 
   check_interval_sec  = 3
   timeout_sec         = 2
@@ -100,8 +124,8 @@ resource google_compute_health_check "multinic" {
   unhealthy_threshold = 2
 
   http_health_check {
-    port         = 80
-    request_path = "/"
+    port         = 9001
+    request_path = "/status.json"
   }
 }
 
@@ -122,7 +146,8 @@ resource "google_compute_region_backend_service" "multinic-main" {
     group = module.multinic-b.instance_group
   }
 
-  health_checks = [google_compute_health_check.multinic.id]
+  # Note this is the traffic health check, not the auto-healing check
+  health_checks = [google_compute_health_check.multinic-traffic.id]
 }
 
 resource "google_compute_region_backend_service" "multinic-transit" {
@@ -142,7 +167,8 @@ resource "google_compute_region_backend_service" "multinic-transit" {
     group = module.multinic-b.instance_group
   }
 
-  health_checks = [google_compute_health_check.multinic.id]
+  # Note this is the traffic health check, not the auto-healing check
+  health_checks = [google_compute_health_check.multinic-traffic.id]
 }
 
 # Reserve an address so we have a well known address to configure for policy routing.
