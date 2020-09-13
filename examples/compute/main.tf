@@ -69,7 +69,7 @@ module "multinic-a" {
 module "multinic-b" {
   source = "../../modules/50_compute"
 
-  num_instances = 0
+  num_instances = var.num_instances
 
   project_id  = local.project_id
   name_prefix = "multinic-b"

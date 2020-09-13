@@ -281,6 +281,8 @@ main() {
     exit 2
   fi
 
+  gcloud logging write multinic '{"vm": "'"${HOSTNAME}"'", "message": "Online and ready"}' --severity=INFO --payload-type=json
+
   # Nice to have packages
   # yum -y install tcpdump mtr tmux
 

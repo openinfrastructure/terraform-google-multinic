@@ -61,7 +61,7 @@ resource google_compute_instance_template "multinic" {
     # Configure  Linux Policy Routing
     startup-script-custom = file("${path.module}/files/startup-multinic.sh")
     # Deletes the route resources
-    shutdown-script       = file("${path.module}/files/ip-router-mig-shutdown.sh")
+    shutdown-script       = file("${path.module}/files/shutdown-multinic.sh")
   }
 
   scheduling {
