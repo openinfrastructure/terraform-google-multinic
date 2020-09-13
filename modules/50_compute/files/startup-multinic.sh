@@ -190,15 +190,22 @@ EOF
 #  1. Traffic from an IP associated with a NIC, either the primary or an ILB.
 #  2. Routed traffic, e.g. ingress into nic0 and egress nic1.
 configure_policy_routing() {
-  local ip0 ip1 gateway0 gateway1 ilb_ip0 ilb_ip1 tmpfile svcfile
+  local ip0 ip1 gateway0 gateway1 netmask0 netmask1 ilb_ip0 ilb_ip1 tmpfile svcfile net0 net1 PREFIX
 
   # Note: This only gets the first forwarded IP address for each interface.
   ip0="$(stdlib::metadata_get -k instance/network-interfaces/0/ip)"
-  ilb_ip0="$(stdlib::metadata_get -k instance/network-interfaces/0/forwarded-ips/0)"
+  # ilb_ip0="$(stdlib::metadata_get -k instance/network-interfaces/0/forwarded-ips/0)"
+  netmask0="$(stdlib::metadata_get -k instance/network-interfaces/0/subnetmask)"
   gateway0="$(stdlib::metadata_get -k instance/network-interfaces/0/gateway)"
   ip1="$(stdlib::metadata_get -k instance/network-interfaces/1/ip)"
-  ilb_ip1="$(stdlib::metadata_get -k instance/network-interfaces/1/forwarded-ips/0)"
+  # ilb_ip1="$(stdlib::metadata_get -k instance/network-interfaces/1/forwarded-ips/0)"
+  netmask1="$(stdlib::metadata_get -k instance/network-interfaces/1/subnetmask)"
   gateway1="$(stdlib::metadata_get -k instance/network-interfaces/1/gateway)"
+
+  eval "$(ipcalc -p "${ip0}/${netmask0}")"
+  net0="${ip0}/${PREFIX}"
+  eval "$(ipcalc -p "${ip1}/${netmask1}")"
+  net1="${ip1}/${PREFIX}"
 
   tmpfile="$(mktemp)"
   cat <<EOF >"$tmpfile"
@@ -224,9 +231,9 @@ ip route add "${gateway1}" dev eth1 scope link table nic1
 # NOTE: These route rules are not cleared by dhclient, they persist.
 ip rule add from "${ip0}" table nic0
 ip rule add from "${ip1}" table nic1
-# ILB IP addresses
-ip rule add from "${ilb_ip0}" table nic0
-ip rule add from "${ilb_ip1}" table nic1
+# ILB IP addresses are expected to be in the nic's subnet.
+ip rule add from "${net0}" table nic0
+ip rule add from "${net1}" table nic1
 # Firewall marking
 iptables -A PREROUTING -i eth0 -t mangle -j MARK --set-mark 1
 iptables -A PREROUTING -i eth1 -t mangle -j MARK --set-mark 2
