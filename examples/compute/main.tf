@@ -18,6 +18,13 @@ variable "num_instances" {
   default     = 0
 }
 
+# Number of instances in zone b
+variable "num_instances_b" {
+  description = "Set to 0 to reduce costs when not actively developing."
+  type        = number
+  default     = 0
+}
+
 locals {
   project_id = "multinic-networks-18d1"
   region     = "us-west1"
@@ -61,7 +68,7 @@ module "multinic-a" {
 module "multinic-b" {
   source = "../../modules/50_compute"
 
-  num_instances = var.num_instances
+  num_instances = var.num_instances_b
 
   project_id  = local.project_id
   name_prefix = "multinic-b"
