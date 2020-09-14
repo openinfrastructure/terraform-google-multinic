@@ -12,14 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Change this to your backend configuration.
-terraform {
-  backend "gcs" {
-    bucket = "v2-platform-state"
-    prefix = "terraform-google-vpc-link/examples/networksetup"
-  }
-}
-
 locals {
   # project_id = "network-dev-123456"
   project_id = module.host.project_id

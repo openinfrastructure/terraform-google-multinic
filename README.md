@@ -8,6 +8,7 @@ tunneling for east-west connectivity.
 Functionality:
 
  * [ILB as Next Hop][ilb-nh] for high availability and reliability.
+ * Virtual wire behavior, traffic ingress to eth0 egresses eth1 and vice-versa.
  * Separate health checks for load balancing and auto-healing.
  * Auto-healing with persistence of established TCP connections.
  * Cloud logging with structured log examples.
@@ -186,6 +187,26 @@ the load balancer health check takes the instance out of service.
 sudo DEBUG=1 google_metadata_script_runner --script-type shutdown --debug
 ```
 
+Known Issues
+===
+
+Policy Based Routing resets
+---
+
+When using the public centos-cloud/centos-8 image various actions reset the
+policy routing configuration causing traffic to stop flowing through the
+instance.  Each of following actions result in routing tables being reset.
+
+These problems may be overcome by using a custom image.
+
+ * `nmcli con down id 'Wired connection 2'; nmcli con up id 'Wired connection 2'`
+ * `systemctl restart google-guest-agent.service`
+
+A work-around is to re-enable policy routing: `systemctl restart
+policy-routing`.
+
+This is is being worked on in [issues/10][issue10].
+
 Benchmarking
 ===
 
@@ -276,6 +297,7 @@ packets.
 [ecmp]: ECMP.md
 [recovery]: RECOVERY.md
 
+[issue10]: https://github.com/openinfrastructure/terraform-google-multinic/issues/10
 [ilb-nh]: https://cloud.google.com/load-balancing/docs/internal/ilb-next-hop-overview
 [ilb]: https://cloud.google.com/load-balancing/docs/internal
 [balancing]: https://cloud.google.com/load-balancing/docs/backend-service#balancing-mode

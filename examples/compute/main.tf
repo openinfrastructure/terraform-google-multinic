@@ -12,14 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Change this to your backend configuration.
-terraform {
-  backend "gcs" {
-    bucket = "v2-platform-state"
-    prefix = "terraform-google-vpc-link/examples/compute"
-  }
-}
-
 variable "num_instances" {
   description = "Set to 0 to reduce costs when not actively developing."
   type        = number
