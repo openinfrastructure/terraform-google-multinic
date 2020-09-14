@@ -12,7 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Instances in the same region as the multinic VMs.
 variable "num_instances" {
+  description = "Set to 0 to reduce costs when not actively developing."
+  type        = number
+  default     = 0
+}
+
+# Instances in a differnt region from the multinic VMs.
+variable "num_instances_remote" {
   description = "Set to 0 to reduce costs when not actively developing."
   type        = number
   default     = 0
@@ -27,6 +35,7 @@ module "endpoint-main-general" {
   source = "../../modules/51_endpoints"
 
   num_instances = var.num_instances
+  preemptible   = true
 
   project_id  = local.project_id
   name_prefix = "endpoint-main-general"
@@ -43,6 +52,7 @@ module "endpoint-transit-general" {
   source = "../../modules/51_endpoints"
 
   num_instances = var.num_instances
+  preemptible   = true
 
   project_id  = local.project_id
   name_prefix = "endpoint-transit-general"
@@ -58,7 +68,7 @@ module "endpoint-transit-general" {
 module "endpoint-main-remote" {
   source = "../../modules/51_endpoints"
 
-  num_instances = var.num_instances
+  num_instances = var.num_instances_remote
 
   project_id  = local.project_id
   name_prefix = "endpoint-main-remote"
@@ -74,7 +84,7 @@ module "endpoint-main-remote" {
 module "endpoint-transit-remote" {
   source = "../../modules/51_endpoints"
 
-  num_instances = var.num_instances
+  num_instances = var.num_instances_remote
 
   project_id  = local.project_id
   name_prefix = "endpoint-transit-remote"

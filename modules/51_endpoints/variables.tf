@@ -124,3 +124,9 @@ variable "disk_size_gb" {
   type        = string
   default     = "100"
 }
+
+variable "preemptible" {
+  description = "Allows instance to be preempted. This defaults to false. See https://cloud.google.com/compute/docs/instances/preemptible"
+  type        = bool
+  default     = false
+}
