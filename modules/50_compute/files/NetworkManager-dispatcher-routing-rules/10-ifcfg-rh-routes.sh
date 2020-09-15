@@ -16,11 +16,7 @@ if [ "$2" != "pre-up" ] && [ "$2" != "down" ]; then
     exit 0
 fi
 
-file_regex='^/etc/sysconfig/network-scripts/ifcfg-([^/]+)$'
-
-[[ "$CONNECTION_FILENAME" =~ $file_regex ]] || exit 0
-
-profile="${BASH_REMATCH[1]}"
+profile="$2"
 
 if [ ! -f "/etc/sysconfig/network-scripts/rule-$profile" ] && [ ! -f "/etc/sysconfig/network-scripts/rule6-$profile" ]; then
     exit 0
