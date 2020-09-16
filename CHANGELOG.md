@@ -1,3 +1,12 @@
+v1.3.0 - 2020-09-28
+===
+
+ * Add `autoscale` input var, default `true`, to enable auto scaling based on
+   CPU utilization.
+ * Changed default instance type to `n1-highcpu-2` to gain 10Gbps send rate.
+ * Added analysis doc of autoscaler behavior at
+   [AUTOSCALER.md](./docs/AUTOSCALER.md).
+
 v1.2.0 - 2020-09-16
 ===
 
