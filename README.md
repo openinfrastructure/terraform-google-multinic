@@ -13,6 +13,7 @@ Functionality:
    details.
  * Virtual wire behavior, traffic ingress to eth0 egresses eth1 and vice-versa.
  * Separate health checks for load balancing and auto-healing.
+ * Multiple region support.  See [examples/multiregion/][multiregion].
  * Cloud logging with structured log examples.
  * Fast startup and shutdown, no packages installed.
  * Systemd integration for easier control and logging.
@@ -285,3 +286,4 @@ packets.
 [balancing]: https://cloud.google.com/load-balancing/docs/backend-service#balancing-mode
 [autoheal]: https://cloud.google.com/compute/docs/instance-groups/autohealing-instances-in-migs
 [autoscaler]: ./docs/AUTOSCALER.md
+[multiregion]: ./examples/multiregion/

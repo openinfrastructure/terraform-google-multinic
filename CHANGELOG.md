@@ -1,3 +1,8 @@
+v1.4.0 - 2020-09-28
+===
+
+ * Multiple region support.  See [examples/multiregion/][multiregion].
+
 v1.3.0 - 2020-09-28
 ===
 
