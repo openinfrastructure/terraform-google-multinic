@@ -187,26 +187,6 @@ the load balancer health check takes the instance out of service.
 sudo DEBUG=1 google_metadata_script_runner --script-type shutdown --debug
 ```
 
-Known Issues
-===
-
-Policy Based Routing resets
----
-
-When using the public centos-cloud/centos-8 image various actions reset the
-policy routing configuration causing traffic to stop flowing through the
-instance.  Each of following actions result in routing tables being reset.
-
-These problems may be overcome by using a custom image.
-
- * `nmcli con down id 'Wired connection 2'; nmcli con up id 'Wired connection 2'`
- * `systemctl restart google-guest-agent.service`
-
-A work-around is to re-enable policy routing: `systemctl restart
-policy-routing`.
-
-This is is being worked on in [issues/10][issue10].
-
 Benchmarking
 ===
 

@@ -1,3 +1,13 @@
+v1.2.0 - 2020-09-16
+===
+
+ * Remove the use if iptables fwmark matches.
+ * Use `ip route replace` instead of `ip route add` to prevent routes from
+   piling up.
+ * Specify ip rule priorities for clarity.
+ * `systemctl stop policy-routing` removes rules, effectively turning off
+   policy routing.
+
 v1.1.0 - 2020-09-16
 ===
 
