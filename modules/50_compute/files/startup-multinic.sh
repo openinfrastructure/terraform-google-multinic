@@ -230,52 +230,65 @@ configure_policy_routing() {
   cat <<EOF >"$tmpfile"
 #! /bin/bash
 # These tables manage default routes based on policy.
-if ! grep -qx '10 nic0' /etc/iproute2/rt_tables; then
-  echo "10 nic0" >> /etc/iproute2/rt_tables
+if ! grep -qx '10 viaeth0' /etc/iproute2/rt_tables; then
+  echo "10 viaeth0" >> /etc/iproute2/rt_tables
 fi
-if ! grep -qx '11 nic1' /etc/iproute2/rt_tables; then
-  echo "11 nic1" >> /etc/iproute2/rt_tables
+if ! grep -qx '11 viaeth1' /etc/iproute2/rt_tables; then
+  echo "11 viaeth1" >> /etc/iproute2/rt_tables
 fi
 
-## These are essentially the same tables, just different default gateways.
-# Traffic addresses attached to the nic0 primary interface
-ip route add default via "${gateway0}" dev eth0 table nic0
-ip route add "${gateway0}" dev eth0 scope link table nic0
-ip route add "${gateway1}" dev eth1 scope link table nic0
-# Traffic addresses attached to the nic1 primary interface
-ip route add default via "${gateway1}" dev eth1 table nic1
-ip route add "${gateway0}" dev eth0 scope link table nic1
-ip route add "${gateway1}" dev eth1 scope link table nic1
+## These are essentially the same tables, just different default routes.
+# via eth0
+ip route replace default via ${gateway0} dev eth0 proto static table viaeth0
+ip route replace ${gateway0} dev eth0 proto static scope link table viaeth0
+ip route replace ${gateway1} dev eth1 proto static scope link table viaeth0
+ip route replace ${net0} via ${gateway0} dev eth0 proto static table viaeth0
+ip route replace ${net1} via ${gateway1} dev eth1 proto static table viaeth0
+# via eth1
+ip route replace default via ${gateway1} dev eth1 proto static table viaeth1
+ip route replace ${gateway0} dev eth0 proto static scope link table viaeth1
+ip route replace ${gateway1} dev eth1 proto static scope link table viaeth1
+ip route replace ${net0} via ${gateway0} dev eth0 proto static table viaeth1
+ip route replace ${net1} via ${gateway1} dev eth1 proto static table viaeth1
 
-# NOTE: These route rules are not cleared by dhclient, they persist.
-ip rule add from "${ip0}" table nic0
-ip rule add from "${ip1}" table nic1
-# ILB IP addresses are expected to be in the nic's subnet.
-ip rule add from "${net0}" table nic0
-ip rule add from "${net1}" table nic1
-# Firewall marking
-iptables -A PREROUTING -i eth0 -t mangle -j MARK --set-mark 1
-iptables -A PREROUTING -i eth1 -t mangle -j MARK --set-mark 2
-# Packets ingress nic0 egress nic1
-ip rule add fwmark 1 table nic1
-# Packets ingress nic1 egress nic0
-ip rule add fwmark 2 table nic0
-# Netblocks via VPC default gateways
+## Rules (Policy Based Routing)
+# PREFERENCE is an unsigned integer value, higher number means lower priority,
+# and rules get processed in order of increasing number.
+# Traffic from the this host.  Intended for health checks.
+ip rule add priority 1000 from ${net0} iif lo table viaeth0
+ip rule add priority 1001 from ${net1} iif lo table viaeth1
+# Traffic not from this host.  Intended to behave as a "virtual wire"
+ip rule add priority 1002 iif eth0 table viaeth1
+ip rule add priority 1003 iif eth1 table viaeth0
+# Flush the route cache
 ip route flush cache
-ip rule
 EOF
+  install -o 0 -g 0 -m 0755 "$tmpfile" /usr/sbin/policy-routing
 
-  install -o 0 -g 0 -m 0755 "$tmpfile" /usr/bin/policy-routing
+  # The corresponding stop script.
+  cat <<EOF >"$tmpfile"
+#! /bin/bash
+# Stop policy routing by deleting the rules.  The custom tables remain but
+# aren't used.
+ip rule delete priority 1000
+ip rule delete priority 1001
+ip rule delete priority 1002
+ip rule delete priority 1003
+EOF
+  install -o 0 -g 0 -m 0755 "$tmpfile" /usr/sbin/policy-routing-stop
 
   svcfile="$(mktemp)"
   cat <<EOF>"$svcfile"
 [Unit]
-Description=Configure policy routing
-After=network.target
+Description=Configure Policy Routing to behave as a virtual wire
+After=network-online.target
+Wants=network-online.target
+PartOf=network.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/policy-routing
+ExecStart=/usr/sbin/policy-routing
+ExecStop=/usr/sbin/policy-routing-stop
 RemainAfterExit=true
 
 [Install]
