@@ -1,3 +1,13 @@
+v1.1.0 - 2020-09-16
+===
+
+ * Workaround `systemctl restart google-guest-agent` breaking policy based
+   routing.  Resolves [#10][issue10].  See also guest-agent [issue #76][guest76].
+ * Send info(), debug() and error() logs to Stackdriver.  Use filter
+   `logName="projects/[PROJECT_ID]/logs/multinic"` to find them.
+ * Add num_instances_b input to control how many instances in each zone.
+ * Add preemptible input var, defaults to false
+
 v1.0.0
 ===
 
@@ -28,3 +38,6 @@ v0.4.3
 ===
 
  * Initial release
+
+[issue10]: https://github.com/openinfrastructure/terraform-google-multinic/issues/10
+[guest76]: https://github.com/GoogleCloudPlatform/guest-agent/issues/76
