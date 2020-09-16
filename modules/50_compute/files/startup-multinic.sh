@@ -19,12 +19,29 @@
 
 set -u
 
+# Return a string payload for logging
+payload() {
+  local payload
+  # One time fetch of instance_id, /etc/google_instance_id may not exist yet.
+  if [[ -z "${INSTANCE_ID:-}" ]]; then
+    local tmpfile
+    tmpfile="$(mktemp)"
+    curl -s -S -f -o "$tmpfile" -H Metadata-Flavor:Google metadata/computeMetadata/v1/instance/id
+    INSTANCE_ID="$(<"$tmpfile")"
+  fi
+
+  payload='{"vm": "'"${HOSTNAME%%.*}"'", "message": "'"$*"'"'
+  payload="${payload}, \"instance_id\": \"${INSTANCE_ID}\"}"
+  echo "${payload}"
+}
+
 error() {
   if [[ -n "${STARTUP_SCRIPT_STDLIB_INITIALIZED:-}" ]]; then
     stdlib::error "$@"
   else
     echo "$@" >&2
   fi
+  gcloud logging write multinic "$(payload "$@")" --severity=ERROR --payload-type=json &
 }
 
 info() {
@@ -33,6 +50,7 @@ info() {
   else
     echo "$@"
   fi
+  gcloud logging write multinic "$(payload "$@")" --severity=INFO --payload-type=json &
 }
 
 debug() {
@@ -41,6 +59,7 @@ debug() {
   else
     echo "$@"
   fi
+  gcloud logging write multinic "$(payload "$@")" --severity=DEBUG --payload-type=json &
 }
 
 cmd() {
@@ -270,7 +289,29 @@ EOF
 return 0
 }
 
+# Workaround https://github.com/GoogleCloudPlatform/guest-agent/issues/76 to
+# prevent `systemctl restart google-guest-agent` from breaking policy routing.
+workaround_guest_agent() {
+  local tmpfile
+  tmpfile="$(mktemp)"
+  cat <<"EOF" >"$tmpfile"
+#! /bin/bash
+# Avoid the call to remove_old_addr, which calls ip addr del, which causes policy routes to be deleted.
+# See https://github.com/GoogleCloudPlatform/guest-agent/issues/76
+logmessage "/etc/dhcp/dhclient-down-hooks - Workaround for https://github.com/GoogleCloudPlatform/guest-agent/issues/76"
+exit_with_hooks 0
+EOF
+  install -o 0 -g 0 -m 0755 "$tmpfile" /etc/dhcp/dhclient-down-hooks
+  rval=$?
+  rm -f "$tmpfile"
+  return $rval
+}
+
 main() {
+  local jobs
+
+  info "BEGIN: Policy Routing Startup for ${HOSTNAME}"
+
   if ! setup_sysctl; then
     error "Failed to configure ip forwarding via sysctl, aborting."
     exit 1
@@ -288,13 +329,28 @@ main() {
     exit 2
   fi
 
-  gcloud logging write multinic '{"vm": "'"${HOSTNAME}"'", "message": "Online and ready"}' --severity=INFO --payload-type=json
+  info "CHECKPOINT: Online and ready ${HOSTNAME}"
+
+  if ! workaround_guest_agent; then
+    error "Failed to work around https://github.com/GoogleCloudPlatform/guest-agent/issues/76"
+    exit 4
+  fi
 
   # Nice to have packages
   # yum -y install tcpdump mtr tmux
 
   # Install panic trigger
   install_kpanic_service
+
+  # Wait for any logging jobs to finish.
+  jobs="$(jobs -p)"
+  if [[ -n "${jobs}" ]]; then
+    # shellcheck disable=SC2086
+    wait ${jobs}
+  fi
+
+  info "END: Policy Routing Startup for ${HOSTNAME}"
+  return 0
 }
 
 # To make this easier to execute interactively during development, load stdlib
@@ -310,6 +366,7 @@ load_stdlib() {
     error "Could not load stdlib from metadata instance/attributes/startup-script"
     return 1
   fi
+
   # shellcheck disable=1090
   source "${tmpfile}"
 }
@@ -327,4 +384,5 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 fi
 
 main "$@"
+
 # vim:sw=2
