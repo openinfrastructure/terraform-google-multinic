@@ -1,0 +1,1 @@
+ip -6 -o a s dev eth0 scope link tentative

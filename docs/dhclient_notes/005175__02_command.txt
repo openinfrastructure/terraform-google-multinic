@@ -1,0 +1,1 @@
+ip route list table local type local scope host dev eth1 proto 66

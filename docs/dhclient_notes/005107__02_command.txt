@@ -1,0 +1,1 @@
+ip -4 route replace 10.37.0.0/20 proto static via 10.37.0.1 dev eth1

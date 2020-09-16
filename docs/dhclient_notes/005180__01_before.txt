@@ -1,0 +1,24 @@
+default via 10.33.0.1 dev eth0 table nic0 
+10.33.0.1 dev eth0 table nic0 scope link 
+10.33.0.1 dev eth0 table nic1 scope link 
+default via 10.33.0.1 dev eth0 proto dhcp metric 100 
+10.33.0.0/20 via 10.33.0.1 dev eth0 proto dhcp metric 100 
+10.33.0.1 dev eth0 proto dhcp scope link metric 100 
+10.37.0.0/20 via 10.37.0.1 dev eth1 proto static 
+10.37.0.1 dev eth1 scope link 
+local 10.33.0.23 dev eth0 table local proto 66 scope host 
+local 10.33.15.197 dev eth0 table local proto kernel scope host src 10.33.15.197 
+local 10.37.15.197 dev eth1 table local proto kernel scope host src 10.37.15.197 
+broadcast 10.37.15.197 dev eth1 table local proto kernel scope link src 10.37.15.197 
+broadcast 127.0.0.0 dev lo table local proto kernel scope link src 127.0.0.1 
+local 127.0.0.0/8 dev lo table local proto kernel scope host src 127.0.0.1 
+local 127.0.0.1 dev lo table local proto kernel scope host src 127.0.0.1 
+broadcast 127.255.255.255 dev lo table local proto kernel scope link src 127.0.0.1 
+::1 dev lo proto kernel metric 256 pref medium
+fe80::/64 dev eth0 proto kernel metric 100 pref medium
+fe80::/64 dev eth1 proto kernel metric 101 pref medium
+local ::1 dev lo table local proto kernel metric 0 pref medium
+local fe80::6654:1243:72be:bcd6 dev eth1 table local proto kernel metric 0 pref medium
+local fe80::d585:6771:5491:fbe3 dev eth0 table local proto kernel metric 0 pref medium
+ff00::/8 dev eth0 table local metric 256 pref medium
+ff00::/8 dev eth1 table local metric 256 pref medium

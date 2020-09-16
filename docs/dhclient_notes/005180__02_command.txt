@@ -1,0 +1,1 @@
+ip route add to local 10.37.0.23/32 scope host dev eth1 proto 66

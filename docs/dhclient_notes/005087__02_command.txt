@@ -1,0 +1,1 @@
+ip -4 route replace 10.37.0.1/32 proto static via 0.0.0.0 dev eth1 scope link

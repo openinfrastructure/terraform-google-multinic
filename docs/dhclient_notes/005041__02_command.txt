@@ -1,0 +1,1 @@
+ip -4 addr del 10.37.15.197/32 dev eth1
