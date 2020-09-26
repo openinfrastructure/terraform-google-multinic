@@ -37,6 +37,8 @@ resource google_compute_instance_template "multinic" {
 
   tags = local.tags
 
+  labels = var.labels
+
   network_interface {
     subnetwork         = var.nic0_subnet
     subnetwork_project = var.nic0_project
@@ -115,5 +117,39 @@ resource "google_compute_instance_group_manager" "multinic" {
   version {
     name              = var.name_prefix
     instance_template = google_compute_instance_template.multinic.self_link
+  }
+}
+
+resource "google_compute_autoscaler" "multinic" {
+  count   = var.autoscale ? 1 : 0
+  project = var.project_id
+  name    = "${var.name_prefix}-${var.zone}"
+  zone    = var.zone
+  target  = google_compute_instance_group_manager.multinic.id
+
+  autoscaling_policy {
+    max_replicas    = var.max_replicas
+    min_replicas    = var.num_instances
+    # systemd-analyze
+    # Startup finished in 1.265s (kernel) + 5.206s (initrd) + 46.529s (userspace) = 53.001s
+    # multi-user.target reached after 27.702s in userspace
+    cooldown_period = 45
+
+    # CPU Utilization results in more responsive autoscaler behavior than
+    # `sent_bytes_count`
+    cpu_utilization {
+      # multinic n1-highcpu-2 utilizes ~22-24% CPU when sending 10Gbps
+      # 0.2 is a good value for a n1-highcpu-2 as of 2020-09-24
+      target = var.utilization_target
+    }
+
+    ## See https://cloud.google.com/monitoring/api/metrics_gcp
+    # Delta count of bytes sent over the network. Sampled every 60 seconds.
+    # After sampling, data is not visible for up to 240 seconds.
+    # metric {
+    #   name   = "compute.googleapis.com/instance/network/sent_bytes_count"
+    #   target = var.utilization_target
+    #   type   = "DELTA_PER_SECOND"
+    # }
   }
 }

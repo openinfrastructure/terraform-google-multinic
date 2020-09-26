@@ -25,6 +25,12 @@ variable "num_instances_b" {
   default     = 0
 }
 
+variable "preemptible" {
+  description = "Allows instance to be preempted. This defaults to false. See https://cloud.google.com/compute/docs/instances/preemptible"
+  type        = bool
+  default     = true
+}
+
 locals {
   project_id = "multinic-networks-18d1"
   region     = "us-west1"
@@ -45,6 +51,8 @@ module "multinic-a" {
   source = "../../modules/50_compute"
 
   num_instances = var.num_instances
+  preemptible   = var.preemptible
+  autoscale     = var.num_instances == 0 ? false : true
 
   project_id  = local.project_id
   name_prefix = "multinic-a"
@@ -69,6 +77,9 @@ module "multinic-b" {
   source = "../../modules/50_compute"
 
   num_instances = var.num_instances_b
+  preemptible   = var.preemptible
+  autoscale     = var.num_instances_b == 0 ? false : true
+
 
   project_id  = local.project_id
   name_prefix = "multinic-b"

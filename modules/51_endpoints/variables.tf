@@ -27,10 +27,16 @@ variable "region" {
   type        = string
 }
 
+variable "distribution_policy_zones" {
+  description = "The full zone names to distribute instances into.  Set this to a single zone to reduce cost during autoscale and load testing."
+  type        = list(string)
+  default     = []
+}
+
 variable "os_image" {
   description = "The os_image used with the MIG instance template"
   type        = string
-  default     = "centos-cloud/centos-8"
+  default     = "debian-cloud/debian-10"
 }
 
 variable "nic0_network" {
@@ -129,4 +135,18 @@ variable "preemptible" {
   description = "Allows instance to be preempted. This defaults to false. See https://cloud.google.com/compute/docs/instances/preemptible"
   type        = bool
   default     = false
+}
+
+variable "iperf_client" {
+  description = "If set, the iperf.service unit file will be started and connect to the server at this address.  For example, '10.10.1.2'"
+  type        = string
+  default     = ""
+}
+
+variable "labels" {
+  description = "Labels to apply to the compute instance resources managed by this module"
+  type        = map
+  default     = {
+    role = "multinic-endpoint"
+  }
 }

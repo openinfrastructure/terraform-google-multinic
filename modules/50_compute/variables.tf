@@ -91,15 +91,15 @@ variable "nic1_cidrs" {
 }
 
 variable "machine_type" {
-  description = "The machine type of each IP Router Bridge instance"
+  description = "The machine type of each IP Router Bridge instance.  Check the table for Maximum egress bandwidth - https://cloud.google.com/compute/docs/machine-types"
   type        = string
-  default     = "n1-standard-1"
+  default     = "n1-highcpu-2"
 }
 
 variable "num_instances" {
   description = "The number of instances in the instance group"
   type        = number
-  default     = 3
+  default     = 1
 }
 
 variable "hc_initial_delay_secs" {
@@ -130,4 +130,32 @@ variable "preemptible" {
   description = "Allows instance to be preempted. This defaults to false. See https://cloud.google.com/compute/docs/instances/preemptible"
   type        = bool
   default     = false
+}
+
+variable "autoscale" {
+  description = "Enable autoscaling default configuration, .  For advanced configuration, set to false and manage your own google_compute_autoscaler resource with target set this module's instance_group.id output value."
+  type        = bool
+  default     = true
+}
+
+variable "utilization_target" {
+  description = "The CPU utilization_target for the Autoscaler.  A n1-highcpu-2 instance sending at 10Gbps has CPU utilization of 22-24%."
+  type        = number
+  default     = 0.2 # 20% when using CPU Utilization
+  # default   = 939524096 # 70% of 10Gbps when using `instance/network/sent_bytes_count`
+  # default   = 161061273 # 60% of 2Gbps when using `instance/network/sent_bytes_count`
+}
+
+variable "max_replicas" {
+  description = "The maximum number of instances when the Autoscaler scales out"
+  type        = number
+  default     = 4
+}
+
+variable "labels" {
+  description = "Labels to apply to the compute instance resources managed by this module"
+  type        = map
+  default     = {
+    role = "multinic-router"
+  }
 }

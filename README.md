@@ -8,9 +8,11 @@ tunneling for east-west connectivity.
 Functionality:
 
  * [ILB as Next Hop][ilb-nh] for high availability and reliability.
+ * Auto-healing with persistence of established TCP connections.
+ * Auto scaling based on CPU utilization.  See [Autoscaler][autoscaler] for
+   details.
  * Virtual wire behavior, traffic ingress to eth0 egresses eth1 and vice-versa.
  * Separate health checks for load balancing and auto-healing.
- * Auto-healing with persistence of established TCP connections.
  * Cloud logging with structured log examples.
  * Fast startup and shutdown, no packages installed.
  * Systemd integration for easier control and logging.
@@ -282,3 +284,4 @@ packets.
 [ilb]: https://cloud.google.com/load-balancing/docs/internal
 [balancing]: https://cloud.google.com/load-balancing/docs/backend-service#balancing-mode
 [autoheal]: https://cloud.google.com/compute/docs/instance-groups/autohealing-instances-in-migs
+[autoscaler]: ./docs/AUTOSCALER.md

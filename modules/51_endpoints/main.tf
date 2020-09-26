@@ -22,6 +22,9 @@ module "startup-script-lib" {
 
 data "template_file" "startup-script-config" {
   template = "${file("${path.module}/templates/startup-script-config.tpl")}"
+  vars = {
+    iperf_client = var.iperf_client
+  }
 }
 
 resource google_compute_instance_template "template" {
@@ -32,6 +35,8 @@ resource google_compute_instance_template "template" {
   can_ip_forward = false
 
   tags = local.tags
+
+  labels = var.labels
 
   network_interface {
     subnetwork         = var.nic0_subnet
@@ -84,7 +89,7 @@ module "mig" {
   health_check      = {
     type                = "http"
     check_interval_sec  = 3
-    port                = 80
+    port                = 9000
     timeout_sec         = 2
     healthy_threshold   = 1
     host                = ""
@@ -106,4 +111,6 @@ module "mig" {
     max_surge_percent             = null
     max_unavailable_percent       = null
   }]
+
+  distribution_policy_zones = var.distribution_policy_zones
 }

@@ -1,0 +1,1025 @@
+---
+insertId: 8c9nn0g3jam6l5
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 1
+  oldSize: 2
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T15:07:30.072745855Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:07:30.066096638Z'
+---
+insertId: mhcgu1gfkrd8sx
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 1
+  old_size: 2
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T15:07:29.984871707Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:07:29.977582315Z'
+---
+insertId: 12kk1jggfk5ba2t
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 2
+  oldSize: 4
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T15:07:16.799540877Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:07:16.791902996Z'
+---
+insertId: ldmkabgeuhnt09
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 2
+  old_size: 4
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T15:07:16.735139565Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:07:16.724634860Z'
+---
+insertId: 9proopgdbrsmzq
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 3
+  oldSize: 4
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T15:07:14.044433186Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:07:14.031225644Z'
+---
+insertId: 1pvjg16g8589ked
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 3
+  old_size: 4
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T15:07:13.923469228Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:07:13.915387958Z'
+---
+insertId: v2uvylg3vkxdlf
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 3
+  oldSize: 5
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T15:07:08.691492693Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:07:08.681848459Z'
+---
+insertId: dlohpcgekvehz7
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 3
+  old_size: 5
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T15:07:08.631436869Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:07:08.622149036Z'
+---
+insertId: 1js0fyng8zqcxfi
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 4
+  oldSize: 5
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T15:06:58.142538758Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:06:58.140716575Z'
+---
+insertId: 81oq8kgcghs8fq
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 4
+  old_size: 5
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T15:06:58.070888841Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:06:58.062951848Z'
+---
+insertId: bdmx7bghr0pk0x
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 5
+  oldSize: 6
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T15:06:48.358783722Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:06:48.351141443Z'
+---
+insertId: 1ixxj8jg1jrfnrq
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 5
+  old_size: 6
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T15:06:48.296272344Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T15:06:48.286866703Z'
+---
+insertId: 148tet9ggdt2fx7
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: OK
+  oldStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:44:30.829289132Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:44:30.827656877Z'
+---
+insertId: 1j7w55vg2dp3bcx
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: OK
+  old_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:44:30.799197458Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:44:30.789575414Z'
+---
+insertId: 15me7hjg1nuw73y
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  oldStatus:
+    details: OK
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:44:22.882186070Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:44:22.870473533Z'
+---
+insertId: 1yre8yfgchs1ooq
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  old_status:
+    details: OK
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:44:22.789079399Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:44:22.773322161Z'
+---
+insertId: 1xdr863gevi2rmv
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: OK
+  oldStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:43:02.702245257Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:43:02.699104243Z'
+---
+insertId: b3s3djg34pag08
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: OK
+  old_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:43:02.672379790Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:43:02.658908093Z'
+---
+insertId: a9n87lgh5z4e0j
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  oldStatus:
+    details: OK
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:42:38.560411257Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:42:38.558601506Z'
+---
+insertId: 9pm1nfg7rhjmfg
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  old_status:
+    details: OK
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:42:38.468851510Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:42:38.466619542Z'
+---
+insertId: 8w5f66ggfy7ihp
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: OK
+  oldStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:41:35.263556054Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:41:35.254492400Z'
+---
+insertId: bno9u6gdgk3i5s
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: OK
+  old_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:41:35.189533701Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:41:35.185820253Z'
+---
+insertId: 1wtnq2dgbi44fbv
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  oldStatus:
+    details: OK
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:40:51.189054Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:40:51.178682132Z'
+---
+insertId: 16gtl2cgc6tgc0s
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  old_status:
+    details: OK
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:40:51.146578907Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:40:51.144404983Z'
+---
+insertId: 1ixxj8jg1jg5a4m
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: OK
+  oldStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:39:06.447020889Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:39:06.435675192Z'
+---
+insertId: iv9cnyg52ec3gc
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: OK
+  old_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:39:06.383018232Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:39:06.381546227Z'
+---
+insertId: 1wtnoa0g2rut532
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  oldStatus:
+    details: OK
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:38:36.897395346Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:38:36.895597563Z'
+---
+insertId: 1ji0k57g28xxceo
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  old_status:
+    details: OK
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:38:36.840206886Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:38:36.837481223Z'
+---
+insertId: xkyqffgglylydh
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: OK
+  oldStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:37:19.218457975Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:37:19.203231693Z'
+---
+insertId: b3s3djg34msvb6
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: OK
+  old_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:37:19.131113454Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:37:19.117826888Z'
+---
+insertId: 1ama8ldg67rlf49
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerStatusChange
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newStatus:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  oldStatus:
+    details: OK
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fstatus_change
+receiveTimestamp: '2020-09-27T14:36:47.105123768Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:36:47.095522092Z'
+---
+insertId: h7okw8gjvdalac
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_status:
+    details: The number of instances in the instance group has reached the max_num_replicas.
+      The autoscaler cannot add more instances.
+  old_status:
+    details: OK
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:36:47.031533255Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:36:47.029675153Z'
+---
+insertId: 1kw0tn5g37ahtig
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 6
+  oldSize: 5
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T14:31:07.042778415Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:31:07.039492447Z'
+---
+insertId: v2vn0igihm9o5k
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 6
+  old_size: 5
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:31:06.957164095Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:31:06.954980769Z'
+---
+insertId: 120lv7ugeo6y80l
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 5
+  oldSize: 2
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T14:29:11.033028115Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:29:11.031127998Z'
+---
+insertId: 1fc055zg7ow2ax6
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 5
+  old_size: 2
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:29:10.948630417Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:29:10.939652881Z'
+---
+insertId: 1plvra7g2sv2h2b
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 2
+  oldSize: 1
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T14:27:16.126782324Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:27:16.113413686Z'
+---
+insertId: h7okw8gjv7zfe1
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 2
+  old_size: 1
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:27:16.062423801Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:27:16.061019199Z'
+---
+insertId: 1o675ngegv88q2
+jsonPayload:
+  '@type': type.googleapis.com/autoscaler.AutoscalerSizeChangeExplanation
+  autoscalerName: multinic-a-us-west1-a
+  instanceGroupName: multinic-a-us-west1-a
+  newSize: 1
+  oldSize: 1
+  projectId: multinic-networks-18d1
+  zoneName: us-west1-a
+logName: projects/multinic-networks-18d1/logs/autoscaler.googleapis.com%2Fsize_change
+receiveTimestamp: '2020-09-27T14:22:58.908542692Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:22:58.900026381Z'
+---
+insertId: 1pvir3tg85masvj
+jsonPayload:
+  autoscaler_name: multinic-a-us-west1-a
+  instance_group_name: multinic-a-us-west1-a
+  new_size: 1
+  old_size: 1
+  project_id: multinic-networks-18d1
+  zone_name: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Fautoscaler
+receiveTimestamp: '2020-09-27T14:22:58.831930388Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:22:58.821287771Z'
+---
+insertId: 77t15zg8ijtkw3
+jsonPayload:
+  actor:
+    user: platform-admin@v2-controller-3467.iam.gserviceaccount.com
+  event_subtype: compute.autoscalers.insert
+  event_timestamp_us: '1601216565098893'
+  event_type: GCE_OPERATION_DONE
+  operation:
+    id: '7810956822379831004'
+    name: operation-1601216563343-5b04c487770c2-533f9dec-d002a6ad
+    type: operation
+    zone: us-west1-a
+  resource:
+    id: '7448944805072936668'
+    name: multinic-a-us-west1-a
+    type: autoscaler
+    zone: us-west1-a
+  trace_id: operation-1601216563343-5b04c487770c2-533f9dec-d002a6ad
+  version: '1.2'
+labels:
+  compute.googleapis.com/resource_id: '7448944805072936668'
+  compute.googleapis.com/resource_name: multinic-a-us-west1-a
+  compute.googleapis.com/resource_type: autoscaler
+  compute.googleapis.com/resource_zone: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Factivity_log
+receiveTimestamp: '2020-09-27T14:22:45.156879541Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:22:45.098893Z'
+---
+insertId: lnhf6gd39o0
+logName: projects/multinic-networks-18d1/logs/cloudaudit.googleapis.com%2Factivity
+operation:
+  id: operation-1601216563343-5b04c487770c2-533f9dec-d002a6ad
+  last: true
+  producer: compute.googleapis.com
+protoPayload:
+  '@type': type.googleapis.com/google.cloud.audit.AuditLog
+  authenticationInfo:
+    principalEmail: platform-admin@v2-controller-3467.iam.gserviceaccount.com
+  methodName: v1.compute.autoscalers.insert
+  request:
+    '@type': type.googleapis.com/compute.autoscalers.insert
+  requestMetadata:
+    callerIp: 35.212.245.41
+    callerNetwork: //compute.googleapis.com/projects/v2-controller-3467/global/networks/__unknown__
+    callerSuppliedUserAgent: HashiCorp Terraform/0.12.26 (+https://www.terraform.io)
+      Terraform Plugin SDK/1.11.0 terraform-provider-google/3.38.0,gzip(gfe)
+    destinationAttributes: {}
+    requestAttributes: {}
+  resourceName: projects/multinic-networks-18d1/zones/us-west1-a/autoscalers/multinic-a-us-west1-a
+  serviceName: compute.googleapis.com
+receiveTimestamp: '2020-09-27T14:22:45.972010908Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: NOTICE
+timestamp: '2020-09-27T14:22:45.005700Z'
+---
+insertId: totxmcga1nep3s
+jsonPayload:
+  actor:
+    user: platform-admin@v2-controller-3467.iam.gserviceaccount.com
+  event_subtype: compute.autoscalers.insert
+  event_timestamp_us: '1601216563951440'
+  event_type: GCE_API_CALL
+  ip_address: ''
+  operation:
+    id: '7810956822379831004'
+    name: operation-1601216563343-5b04c487770c2-533f9dec-d002a6ad
+    type: operation
+    zone: us-west1-a
+  request:
+    body: 'null'
+    url: https://www.googleapis.com/compute/v1/projects/multinic-networks-18d1/zones/us-west1-a/autoscalers?alt=json
+  resource:
+    id: '7448944805072936668'
+    name: multinic-a-us-west1-a
+    type: autoscaler
+    zone: us-west1-a
+  trace_id: operation-1601216563343-5b04c487770c2-533f9dec-d002a6ad
+  user_agent: HashiCorp Terraform/0.12.26 (+https://www.terraform.io) Terraform Plugin
+    SDK/1.11.0 terraform-provider-google/3.38.0,gzip(gfe)
+  version: '1.2'
+labels:
+  compute.googleapis.com/resource_id: '7448944805072936668'
+  compute.googleapis.com/resource_name: multinic-a-us-west1-a
+  compute.googleapis.com/resource_type: autoscaler
+  compute.googleapis.com/resource_zone: us-west1-a
+logName: projects/multinic-networks-18d1/logs/compute.googleapis.com%2Factivity_log
+receiveTimestamp: '2020-09-27T14:22:43.990446438Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: INFO
+timestamp: '2020-09-27T14:22:43.951440Z'
+---
+insertId: au0nhme22hn6
+logName: projects/multinic-networks-18d1/logs/cloudaudit.googleapis.com%2Factivity
+operation:
+  first: true
+  id: operation-1601216563343-5b04c487770c2-533f9dec-d002a6ad
+  producer: compute.googleapis.com
+protoPayload:
+  '@type': type.googleapis.com/google.cloud.audit.AuditLog
+  authenticationInfo:
+    principalEmail: platform-admin@v2-controller-3467.iam.gserviceaccount.com
+    serviceAccountDelegationInfo:
+    - firstPartyPrincipal:
+        principalEmail: service-353844093205@compute-system.iam.gserviceaccount.com
+  authorizationInfo:
+  - granted: true
+    permission: compute.autoscalers.create
+    resourceAttributes:
+      name: projects/multinic-networks-18d1/zones/us-west1-a/autoscalers/multinic-a-us-west1-a
+      service: compute
+      type: compute.autoscalers
+  - granted: true
+    permission: compute.instanceGroupManagers.use
+    resourceAttributes:
+      name: projects/multinic-networks-18d1/zones/us-west1-a/instanceGroupManagers/multinic-a-us-west1-a
+      service: compute
+      type: compute.instanceGroupManagers
+  methodName: v1.compute.autoscalers.insert
+  request:
+    '@type': type.googleapis.com/compute.autoscalers.insert
+    autoscalingPolicy:
+      coolDownPeriodSec: '45'
+      cpuUtilization:
+        utilizationTarget: 0.2
+      maxNumReplicas: '6'
+      minNumReplicas: '1'
+      mode: ON
+    name: multinic-a-us-west1-a
+    target: https://compute.googleapis.com/compute/v1/projects/multinic-networks-18d1/zones/us-west1-a/instanceGroupManagers/multinic-a-us-west1-a
+  requestMetadata:
+    callerIp: 35.212.245.41
+    callerNetwork: //compute.googleapis.com/projects/v2-controller-3467/global/networks/__unknown__
+    callerSuppliedUserAgent: HashiCorp Terraform/0.12.26 (+https://www.terraform.io)
+      Terraform Plugin SDK/1.11.0 terraform-provider-google/3.38.0,gzip(gfe)
+    destinationAttributes: {}
+    requestAttributes:
+      auth: {}
+      time: '2020-09-27T14:22:43.969006Z'
+  resourceLocation:
+    currentLocations:
+    - us-west1-a
+  resourceName: projects/multinic-networks-18d1/zones/us-west1-a/autoscalers/multinic-a-us-west1-a
+  response:
+    '@type': type.googleapis.com/operation
+    id: '7810956822379831004'
+    insertTime: '2020-09-27T07:22:43.791-07:00'
+    name: operation-1601216563343-5b04c487770c2-533f9dec-d002a6ad
+    operationType: compute.autoscalers.insert
+    progress: '0'
+    selfLink: https://www.googleapis.com/compute/v1/projects/multinic-networks-18d1/zones/us-west1-a/operations/operation-1601216563343-5b04c487770c2-533f9dec-d002a6ad
+    selfLinkWithId: https://www.googleapis.com/compute/v1/projects/multinic-networks-18d1/zones/us-west1-a/operations/7810956822379831004
+    startTime: '2020-09-27T07:22:43.801-07:00'
+    status: RUNNING
+    targetId: '7448944805072936668'
+    targetLink: https://www.googleapis.com/compute/v1/projects/multinic-networks-18d1/zones/us-west1-a/autoscalers/multinic-a-us-west1-a
+    user: platform-admin@v2-controller-3467.iam.gserviceaccount.com
+    zone: https://www.googleapis.com/compute/v1/projects/multinic-networks-18d1/zones/us-west1-a
+  serviceName: compute.googleapis.com
+receiveTimestamp: '2020-09-27T14:22:44.229950073Z'
+resource:
+  labels:
+    autoscaler_id: '7448944805072936668'
+    location: us-west1-a
+    project_id: multinic-networks-18d1
+  type: gce_autoscaler
+severity: NOTICE
+timestamp: '2020-09-27T14:22:43.420010Z'
