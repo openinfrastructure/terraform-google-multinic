@@ -12,14 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-locals {
-
-  nic0_network = "main"
-  nic0_subnet  = "main-bridge"
-  nic1_network = "transit"
-  nic1_subnet  = "transit-bridge"
-}
-
 # Manage the regional MIG formation
 module "multinic-a" {
   source = "../50_compute"

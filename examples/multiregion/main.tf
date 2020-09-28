@@ -37,6 +37,13 @@ locals {
 #
 # nic1_cidrs means the CIDR ranges for each traffic routes via (egress) nic1.
 # nic1 is "westbound" toward the Transit VPC
+#
+# See: https://cloud.google.com/load-balancing/docs/internal/ilb-next-hop-overview#destination_range
+# If you have different internal TCP/UDP load balancers as next hops for
+# multiple routes that have the same destination and priority, Google Cloud
+# doesn't distribute the traffic among the load balancers. Instead, Google
+# Cloud chooses only one of the load balancers as the next hop for all traffic
+# that matches the destination and ignores the other load balancers.
 
 # Manage the regional MIG formation
 module "multinic-us-west1" {
