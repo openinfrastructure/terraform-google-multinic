@@ -43,6 +43,7 @@ module "main-vpc" {
     general = { ip_cidr_range = "10.32.0.0/20", region = local.region },
     bridge  = { ip_cidr_range = "10.33.0.0/20", region = local.region },
     remote  = { ip_cidr_range = "10.34.0.0/20", region = "us-west2" },
+    bridge2  = { ip_cidr_range = "10.40.0.0/20", region = "us-west2" },
   }
   project_id = local.project_id
   region     = local.region
@@ -58,6 +59,7 @@ module "transit-vpc" {
     general = { ip_cidr_range = "10.36.0.0/20", region = local.region },
     bridge = { ip_cidr_range = "10.37.0.0/20", region = local.region },
     remote  = { ip_cidr_range = "10.38.0.0/20", region = "us-west2" },
+    bridge2 = { ip_cidr_range = "10.41.0.0/20", region = "us-west2" },
   }
   project_id   = local.project_id
   region       = local.region
