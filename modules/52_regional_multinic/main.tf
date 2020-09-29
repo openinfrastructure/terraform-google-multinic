@@ -12,8 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+data "google_compute_zones" "available" {
+  project = var.project_id
+  region  = var.region
+}
+
+locals {
+  zones = data.google_compute_zones.available.names
+}
+
 # Manage the regional MIG formation
-module "multinic-a" {
+module "multinic" {
   source = "../50_compute"
 
   num_instances = var.num_instances
@@ -21,57 +30,9 @@ module "multinic-a" {
   autoscale     = var.num_instances == 0 ? false : true
 
   project_id  = var.project_id
-  name_prefix = "multinic-${var.region}-a"
+  name_prefix = "multinic-${var.region}"
   region      = var.region
-  zone        = "${var.region}-a"
-
-  nic0_project = var.project_id
-  nic0_network = var.nic0_network
-  nic0_subnet  = var.nic0_subnet
-
-  nic1_project = var.project_id
-  nic1_network = var.nic1_network
-  nic1_subnet  = var.nic1_subnet
-
-  hc_self_link          = google_compute_health_check.multinic-health.self_link
-  service_account_email = var.service_account_email
-}
-
-module "multinic-b" {
-  source = "../50_compute"
-
-  num_instances = var.num_instances
-  preemptible   = var.preemptible
-  autoscale     = var.num_instances == 0 ? false : true
-
-  project_id  = var.project_id
-  name_prefix = "multinic-${var.region}-b"
-  region      = var.region
-  zone        = "${var.region}-b"
-
-  nic0_project = var.project_id
-  nic0_network = var.nic0_network
-  nic0_subnet  = var.nic0_subnet
-
-  nic1_project = var.project_id
-  nic1_network = var.nic1_network
-  nic1_subnet  = var.nic1_subnet
-
-  hc_self_link          = google_compute_health_check.multinic-health.self_link
-  service_account_email = var.service_account_email
-}
-
-module "multinic-c" {
-  source = "../50_compute"
-
-  num_instances = var.num_instances
-  preemptible   = var.preemptible
-  autoscale     = var.num_instances == 0 ? false : true
-
-  project_id  = var.project_id
-  name_prefix = "multinic-${var.region}-c"
-  region      = var.region
-  zone        = "${var.region}-c"
+  zones       = local.zones
 
   nic0_project = var.project_id
   nic0_network = var.nic0_network
@@ -132,16 +93,11 @@ resource "google_compute_region_backend_service" "multinic-main" {
   region                = var.region
   load_balancing_scheme = "INTERNAL"
 
-  backend {
-    group = module.multinic-a.instance_group
-  }
-
-  backend {
-    group = module.multinic-b.instance_group
-  }
-
-  backend {
-    group = module.multinic-c.instance_group
+  dynamic "backend" {
+    for_each = module.multinic.instance_groups
+    content {
+      group = backend.value
+    }
   }
 
   # Note this is the traffic health check, not the auto-healing check
@@ -157,16 +113,11 @@ resource "google_compute_region_backend_service" "multinic-transit" {
   region                = var.region
   load_balancing_scheme = "INTERNAL"
 
-  backend {
-    group = module.multinic-a.instance_group
-  }
-
-  backend {
-    group = module.multinic-b.instance_group
-  }
-
-  backend {
-    group = module.multinic-c.instance_group
+  dynamic "backend" {
+    for_each = module.multinic.instance_groups
+    content {
+      group = backend.value
+    }
   }
 
   # Note this is the traffic health check, not the auto-healing check

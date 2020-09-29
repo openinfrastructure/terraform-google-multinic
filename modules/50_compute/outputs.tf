@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-output "instance_group" {
-  description = "The instance group intended for use with a google_compute_region_backend_service resource"
-  value       = google_compute_instance_group_manager.multinic.instance_group
+output "instance_groups" {
+  description = "The instance groups intended for use with a google_compute_region_backend_service resource"
+  value       = { for k,v in google_compute_instance_group_manager.multinic : k => v.instance_group }
 }

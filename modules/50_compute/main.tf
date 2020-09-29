@@ -82,12 +82,13 @@ resource google_compute_instance_template "multinic" {
 }
 
 resource "google_compute_instance_group_manager" "multinic" {
+  for_each = toset(var.zones)
   project  = var.project_id
-  name     = "${var.name_prefix}-${var.zone}"
+  name     = "${var.name_prefix}-${each.value}"
 
   base_instance_name = var.name_prefix
 
-  zone = var.zone
+  zone = each.value
 
   update_policy {
     type                  = "PROACTIVE"
@@ -121,11 +122,11 @@ resource "google_compute_instance_group_manager" "multinic" {
 }
 
 resource "google_compute_autoscaler" "multinic" {
-  count   = var.autoscale ? 1 : 0
-  project = var.project_id
-  name    = "${var.name_prefix}-${var.zone}"
-  zone    = var.zone
-  target  = google_compute_instance_group_manager.multinic.id
+  for_each = toset(var.autoscale ? var.zones : [])
+  project  = var.project_id
+  name     = "${var.name_prefix}-${each.value}"
+  zone     = each.value
+  target   = google_compute_instance_group_manager.multinic[each.value].id
 
   autoscaling_policy {
     max_replicas    = var.max_replicas

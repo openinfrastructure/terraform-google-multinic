@@ -1,3 +1,13 @@
+v2.0.0 - 2020-09-29
+===
+
+ * Fix [issue/20][issue20] `modules/52_regional_multinic` now deploys instance
+   groups to all available zones in the specified region.  Fixes error
+   deploying to us-east1 and europe-west1 where there is no `a` zone.
+ * Note, resources will be destroyed and re-created.  The inputs to
+   `52_regional_multinic` have *not* changed relative to v1.4.0.  The `zone`
+   input to `50_compute` is replaced by `zones`.
+
 v1.4.0 - 2020-09-28
 ===
 
@@ -65,3 +75,4 @@ v0.4.3
 
 [issue10]: https://github.com/openinfrastructure/terraform-google-multinic/issues/10
 [guest76]: https://github.com/GoogleCloudPlatform/guest-agent/issues/76
+[issue20]: https://github.com/openinfrastructure/terraform-google-multinic/issues/20

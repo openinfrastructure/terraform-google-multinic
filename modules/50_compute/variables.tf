@@ -27,9 +27,9 @@ variable "region" {
   type        = string
 }
 
-variable "zone" {
-  description = "The zone containing the managed resources"
-  type        = string
+variable "zones" {
+  description = "The zones containing the managed resources, for example ['us-west1-a', 'us-west1-b', 'us-west1-c']"
+  type        = list(string)
 }
 
 variable "service_account_email" {

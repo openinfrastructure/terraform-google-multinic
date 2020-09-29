@@ -47,7 +47,7 @@ locals {
 }
 
 # Manage the regional MIG formation
-module "multinic-a" {
+module "multinic" {
   source = "../../modules/50_compute"
 
   num_instances = var.num_instances
@@ -55,9 +55,9 @@ module "multinic-a" {
   autoscale     = var.num_instances == 0 ? false : true
 
   project_id  = local.project_id
-  name_prefix = "multinic-a"
+  name_prefix = "multinic"
   region      = local.region
-  zone        = "${local.region}-a"
+  zones       = [ "${local.region}-b", "${local.region}-c" ]
 
   nic0_network = local.nic0_network
   nic0_project = local.project_id
@@ -69,34 +69,6 @@ module "multinic-a" {
   nic1_subnet  = local.nic1_subnet
   nic1_cidrs   = [local.nic1_netblock]
 
-  hc_self_link = google_compute_health_check.multinic-health.self_link
-  service_account_email = "multinic@${local.project_id}.iam.gserviceaccount.com"
-}
-
-module "multinic-b" {
-  source = "../../modules/50_compute"
-
-  num_instances = var.num_instances_b
-  preemptible   = var.preemptible
-  autoscale     = var.num_instances_b == 0 ? false : true
-
-
-  project_id  = local.project_id
-  name_prefix = "multinic-b"
-  region      = local.region
-  zone        = "${local.region}-b"
-
-  nic0_network = local.nic0_network
-  nic0_project = local.project_id
-  nic0_subnet  = local.nic0_subnet
-  nic0_cidrs   = [local.nic0_netblock]
-
-  nic1_network = local.nic1_network
-  nic1_project = local.project_id
-  nic1_subnet  = local.nic1_subnet
-  nic1_cidrs   = [local.nic1_netblock]
-
-  # Note this is the auto-healing check, not the traffic check
   hc_self_link = google_compute_health_check.multinic-health.self_link
   service_account_email = "multinic@${local.project_id}.iam.gserviceaccount.com"
 }
@@ -148,12 +120,11 @@ resource "google_compute_region_backend_service" "multinic-main" {
   region                = local.region
   load_balancing_scheme = "INTERNAL"
 
-  backend {
-    group = module.multinic-a.instance_group
-  }
-
-  backend {
-    group = module.multinic-b.instance_group
+  dynamic "backend" {
+    for_each = module.multinic.instance_groups
+    content {
+      group = backend.value
+    }
   }
 
   # Note this is the traffic health check, not the auto-healing check
@@ -169,12 +140,11 @@ resource "google_compute_region_backend_service" "multinic-transit" {
   region                = local.region
   load_balancing_scheme = "INTERNAL"
 
-  backend {
-    group = module.multinic-a.instance_group
-  }
-
-  backend {
-    group = module.multinic-b.instance_group
+  dynamic "backend" {
+    for_each = module.multinic.instance_groups
+    content {
+      group = backend.value
+    }
   }
 
   # Note this is the traffic health check, not the auto-healing check
