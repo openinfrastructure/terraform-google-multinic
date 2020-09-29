@@ -70,3 +70,5 @@ backend.tf
 provider.tf
 
 terraform.tfplan*
+
+*.tfvars
