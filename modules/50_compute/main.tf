@@ -14,6 +14,8 @@
 
 locals {
   tags = concat(list("multinic-router"), var.tags)
+  # Unique suffix for regional resources
+  r_suffix = substr(sha1(var.region), 0, 6)
 }
 
 module "startup-script-lib" {
@@ -84,7 +86,7 @@ resource google_compute_instance_template "multinic" {
 resource "google_compute_instance_group_manager" "multinic" {
   for_each = toset(var.zones)
   project  = var.project_id
-  name     = "${var.name_prefix}-${each.value}"
+  name     = "${var.name_prefix}-${substr(sha1(each.value), 0, 6)}"
 
   base_instance_name = var.name_prefix
 
@@ -124,7 +126,7 @@ resource "google_compute_instance_group_manager" "multinic" {
 resource "google_compute_autoscaler" "multinic" {
   for_each = toset(var.autoscale ? var.zones : [])
   project  = var.project_id
-  name     = "${var.name_prefix}-${each.value}"
+  name     = "${var.name_prefix}-${substr(sha1(each.value), 0, 6)}"
   zone     = each.value
   target   = google_compute_instance_group_manager.multinic[each.value].id
 

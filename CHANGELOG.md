@@ -1,3 +1,11 @@
+v3.0.0 - 2020-09-30
+===
+
+ * Add support and documentation for zero-downtime upgrades.  See
+   [issue/23](https://github.com/openinfrastructure/terraform-google-multinic/issues/23).
+ * Follow the process described in [UPGRADE.md](./docs/UPGRADE.md) when
+   upgrading to this major version.
+
 v2.0.0 - 2020-09-29
 ===
 

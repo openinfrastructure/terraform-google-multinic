@@ -46,8 +46,11 @@ locals {
 # that matches the destination and ignores the other load balancers.
 
 # Manage the regional MIG formation
-module "multinic-us-west1" {
+module "multinic-us-west1-v3" {
   source = "../../modules/52_regional_multinic"
+
+  name_prefix = "multinic-v3"
+  priority    = 901
 
   num_instances = var.num_instances
   preemptible   = var.preemptible
@@ -73,8 +76,11 @@ module "multinic-us-west1" {
 }
 
 # Manage the regional MIG formation
-module "multinic-us-west2" {
+module "multinic-us-west2-v3" {
   source = "../../modules/52_regional_multinic"
+
+  name_prefix = "multinic-v3"
+  priority    = 901
 
   num_instances = var.num_instances
   preemptible   = var.preemptible

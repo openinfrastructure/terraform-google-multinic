@@ -18,7 +18,9 @@ data "google_compute_zones" "available" {
 }
 
 locals {
-  zones = data.google_compute_zones.available.names
+  zones    = data.google_compute_zones.available.names
+  # Unique suffix for regional resources
+  r_suffix = substr(sha1(var.region), 0, 6)
 }
 
 # Manage the regional MIG formation
@@ -30,7 +32,7 @@ module "multinic" {
   autoscale     = var.num_instances == 0 ? false : true
 
   project_id  = var.project_id
-  name_prefix = "multinic-${var.region}"
+  name_prefix = var.name_prefix
   region      = var.region
   zones       = local.zones
 
@@ -51,7 +53,7 @@ module "multinic" {
 # instance.
 resource google_compute_health_check "multinic-health" {
   project = var.project_id
-  name    = "multinic-health-${var.region}"
+  name    = "${var.name_prefix}-hc-${local.r_suffix}"
 
   check_interval_sec  = 10
   timeout_sec         = 5
@@ -71,7 +73,7 @@ resource google_compute_health_check "multinic-health" {
 # second window provided for shutdown.
 resource google_compute_health_check "multinic-traffic" {
   project = var.project_id
-  name    = "multinic-traffic-${var.region}"
+  name    = "${var.name_prefix}-tc-${local.r_suffix}"
 
   check_interval_sec  = 3
   timeout_sec         = 2
@@ -84,11 +86,11 @@ resource google_compute_health_check "multinic-traffic" {
   }
 }
 
-resource "google_compute_region_backend_service" "multinic-main" {
+resource "google_compute_region_backend_service" "multinic-nic0" {
   provider = google-beta
   project  = var.project_id
 
-  name                  = "multinic-main-${var.region}"
+  name                  = "${var.name_prefix}-${local.r_suffix}-0"
   network               = var.nic0_network
   region                = var.region
   load_balancing_scheme = "INTERNAL"
@@ -104,11 +106,11 @@ resource "google_compute_region_backend_service" "multinic-main" {
   health_checks = [google_compute_health_check.multinic-traffic.id]
 }
 
-resource "google_compute_region_backend_service" "multinic-transit" {
+resource "google_compute_region_backend_service" "multinic-nic1" {
   provider = google-beta
   project  = var.project_id
 
-  name                  = "multinic-transit-${var.region}"
+  name                  = "${var.name_prefix}-${local.r_suffix}-1"
   network               = var.nic1_network
   region                = var.region
   load_balancing_scheme = "INTERNAL"
@@ -125,29 +127,29 @@ resource "google_compute_region_backend_service" "multinic-transit" {
 }
 
 # Reserve an address so we have a well known address to configure for policy routing.
-resource "google_compute_address" "main" {
-  name         = "multinic-fwd-main-${var.region}"
+resource "google_compute_address" "ilb0" {
+  name         = "${var.name_prefix}-${local.r_suffix}-ilb0"
   project      = var.project_id
   region       = var.region
   subnetwork   = var.nic0_subnet
   address_type = "INTERNAL"
 }
 
-resource "google_compute_address" "transit" {
-  name         = "multinic-fwd-transit-${var.region}"
+resource "google_compute_address" "ilb1" {
+  name         = "${var.name_prefix}-${local.r_suffix}-ilb1"
   project      = var.project_id
   region       = var.region
   subnetwork   = var.nic1_subnet
   address_type = "INTERNAL"
 }
 
-resource google_compute_forwarding_rule "main" {
-  name    = "multinic-main-${var.region}"
+resource google_compute_forwarding_rule "ilb0" {
+  name    = "${var.name_prefix}-${local.r_suffix}-ilb0"
   project = var.project_id
   region  = var.region
 
-  ip_address      = google_compute_address.main.address
-  backend_service = google_compute_region_backend_service.multinic-main.id
+  ip_address      = google_compute_address.ilb0.address
+  backend_service = google_compute_region_backend_service.multinic-nic0.id
   network         = var.nic0_network
   subnetwork      = var.nic0_subnet
 
@@ -156,13 +158,13 @@ resource google_compute_forwarding_rule "main" {
   allow_global_access   = true
 }
 
-resource google_compute_forwarding_rule "transit" {
-  name    = "multinic-transit-${var.region}"
+resource google_compute_forwarding_rule "ilb1" {
+  name    = "${var.name_prefix}-${local.r_suffix}-ilb1"
   project = var.project_id
   region  = var.region
 
-  ip_address      = google_compute_address.transit.address
-  backend_service = google_compute_region_backend_service.multinic-transit.id
+  ip_address      = google_compute_address.ilb1.address
+  backend_service = google_compute_region_backend_service.multinic-nic1.id
   network         = var.nic1_network
   subnetwork      = var.nic1_subnet
 
@@ -172,22 +174,22 @@ resource google_compute_forwarding_rule "transit" {
 }
 
 // Route resources
-resource google_compute_route "main" {
+resource google_compute_route "via_nic1" {
   for_each     = toset(var.nic1_cidrs)
-  name         = "multinic-main-${var.region}-${substr(sha1(each.value), 0, 6)}"
+  name         = "${var.name_prefix}-${local.r_suffix}-${substr(sha1("${var.nic0_network}-${each.value}"), 0, 6)}"
   project      = var.project_id
   network      = var.nic0_network
   dest_range   = each.value
-  priority     = 900
-  next_hop_ilb = google_compute_forwarding_rule.main.self_link
+  priority     = var.priority
+  next_hop_ilb = google_compute_forwarding_rule.ilb0.self_link
 }
 
-resource google_compute_route "transit" {
+resource google_compute_route "via_nic0" {
   for_each     = toset(var.nic0_cidrs)
-  name         = "multinic-transit-${var.region}-${substr(sha1(each.value), 0, 6)}"
+  name         = "${var.name_prefix}-${local.r_suffix}-${substr(sha1("${var.nic1_network}-${each.value}"), 0, 6)}"
   project      = var.project_id
   network      = var.nic1_network
   dest_range   = each.value
-  priority     = 900
-  next_hop_ilb = google_compute_forwarding_rule.transit.self_link
+  priority     = var.priority
+  next_hop_ilb = google_compute_forwarding_rule.ilb1.self_link
 }

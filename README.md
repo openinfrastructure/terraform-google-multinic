@@ -17,7 +17,14 @@ Functionality:
  * Cloud logging with structured log examples.
  * Fast startup and shutdown, no packages installed.
  * Systemd integration for easier control and logging.
+ * Zero downtime upgrades of this module.
  * CentOS 8 base image.
+
+Upgrades
+===
+
+When upgrading to a new versions of this module, follow the process described
+in [UPGRADE.md](./docs/UPGRADE.md) to avoid downtime.
 
 Getting Started
 ===

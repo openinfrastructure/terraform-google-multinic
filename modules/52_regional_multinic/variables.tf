@@ -17,6 +17,18 @@ variable "project_id" {
   type        = string
 }
 
+variable "name_prefix" {
+  description = "The name prefix to uss for managed resources, for example 'multinic'.  Intended for major version upgrades of the module."
+  type        = string
+  default     = "multinic-v2"
+}
+
+variable "priority" {
+  description = "The route priority to use for managed resources.  Intended for major version upgrades of the module."
+  type        = number
+  default     = 900
+}
+
 variable "region" {
   description = "The region containing the managed resources"
   type        = string

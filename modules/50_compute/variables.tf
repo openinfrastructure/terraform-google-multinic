@@ -13,8 +13,9 @@
 # limitations under the License.
 
 variable "name_prefix" {
-  description = "The name prefix to us for managed resources, for example 'multinic'"
+  description = "The name prefix to us for managed resources, for example 'multinic'.  Intended for major version upgrades of the module.  Use a unique value for each region.  See also UPGRADE.md for major version upgrades."
   type        = string
+  default     = "multinic"
 }
 
 variable "project_id" {
