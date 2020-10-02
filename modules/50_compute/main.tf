@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+data "google_compute_image" "img" {
+  project = var.image_project
+  name    = var.image_name == "" ? null : var.image_name
+  family  = var.image_name == "" ? var.image_family : null
+}
+
 locals {
   tags = concat(list("multinic-router"), var.tags)
   # Unique suffix for regional resources
@@ -52,9 +58,9 @@ resource google_compute_instance_template "multinic" {
   }
 
   disk {
+    source_image = data.google_compute_image.img.self_link
     auto_delete  = true
     boot         = true
-    source_image = var.os_image
     type         = "PERSISTENT"
     disk_size_gb = var.disk_size_gb
   }

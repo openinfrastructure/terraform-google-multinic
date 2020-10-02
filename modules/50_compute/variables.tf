@@ -38,10 +38,22 @@ variable "service_account_email" {
   type        = string
 }
 
-variable "os_image" {
-  description = "The os_image used with the MIG instance template"
+variable "image_project" {
+  description = "The image project used with the MIG instance template"
   type        = string
-  default     = "centos-cloud/centos-8"
+  default     = "centos-cloud"
+}
+
+variable "image_name" {
+  description = "The image name used with the MIG instance template.  If the value is the empty string, image_family is used instead."
+  type        = string
+  default     = "centos-8-v20200910"
+}
+
+variable "image_family" {
+  description = "Configures templates to use the latest non-deprecated image in the family at the point Terraform apply is run.  Used only if image_name is empty."
+  type        = string
+  default     = "centos-8"
 }
 
 variable "nic0_network" {

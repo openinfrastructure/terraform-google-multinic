@@ -27,9 +27,12 @@ locals {
 module "multinic" {
   source = "../50_compute"
 
+  image_project = var.image_project
+  image_name    = var.image_name
+  image_family  = var.image_family
+  machine_type  = var.machine_type
   num_instances = var.num_instances
   preemptible   = var.preemptible
-  autoscale     = var.num_instances == 0 ? false : true
 
   project_id  = var.project_id
   name_prefix = var.name_prefix
@@ -43,6 +46,10 @@ module "multinic" {
   nic1_project = var.project_id
   nic1_network = var.nic1_network
   nic1_subnet  = var.nic1_subnet
+
+  autoscale          = var.autoscale
+  utilization_target = var.utilization_target
+  max_replicas       = var.max_replicas
 
   hc_self_link          = google_compute_health_check.multinic-health.self_link
   service_account_email = var.service_account_email

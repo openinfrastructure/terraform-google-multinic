@@ -40,6 +40,30 @@ variable "num_instances" {
   default     = 0
 }
 
+variable "machine_type" {
+  description = "The machine type of each IP Router Bridge instance.  Check the table for Maximum egress bandwidth - https://cloud.google.com/compute/docs/machine-types"
+  type        = string
+  default     = "n1-highcpu-2"
+}
+
+variable "image_project" {
+  description = "The image project used with the MIG instance template"
+  type        = string
+  default     = "centos-cloud"
+}
+
+variable "image_name" {
+  description = "The image name used with the MIG instance template.  If the value is the empty string, image_family is used instead."
+  type        = string
+  default     = "centos-8-v20200910"
+}
+
+variable "image_family" {
+  description = "Configures templates to use the latest non-deprecated image in the family at the point Terraform apply is run.  Used only if image_name is empty."
+  type        = string
+  default     = "centos-8"
+}
+
 variable "preemptible" {
   description = "Allows instance to be preempted. This defaults to false. See https://cloud.google.com/compute/docs/instances/preemptible"
   type        = bool
@@ -91,4 +115,32 @@ variable "nic1_cidrs" {
 variable "service_account_email" {
   description = "The service account bound to the bridge VM instances.  Must have permission to create Route resources in both the app and core VPC networks."
   type        = string
+}
+
+variable "autoscale" {
+  description = "Enable autoscaling default configuration, .  For advanced configuration, set to false and manage your own google_compute_autoscaler resource with target set this module's instance_group.id output value."
+  type        = bool
+  default     = true
+}
+
+variable "utilization_target" {
+  description = "The CPU utilization_target for the Autoscaler.  A n1-highcpu-2 instance sending at 10Gbps has CPU utilization of 22-24%."
+  type        = number
+  default     = 0.2 # 20% when using CPU Utilization
+  # default   = 939524096 # 70% of 10Gbps when using `instance/network/sent_bytes_count`
+  # default   = 161061273 # 60% of 2Gbps when using `instance/network/sent_bytes_count`
+}
+
+variable "max_replicas" {
+  description = "The maximum number of instances when the Autoscaler scales out"
+  type        = number
+  default     = 4
+}
+
+variable "labels" {
+  description = "Labels to apply to the compute instance resources managed by this module"
+  type        = map
+  default     = {
+    role = "multinic-router"
+  }
 }

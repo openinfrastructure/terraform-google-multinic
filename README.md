@@ -51,6 +51,19 @@ instances in multiple zones within a single region.
     auto-healing.
  5. 2 ILB forwarding rules, one for each VPC.
 
+OS Images
+===
+
+Version 3.1.0 and later of this module pins the OS image used for multinic
+instances to a specific value.  This ensures the same image is used as
+instances scale in, scale out, and are auto-healed.   In addition, multiple
+runs of terraform will use the same image specified by the `image_name` input
+value.
+
+See [Deploying the Latest
+Image](https://www.terraform.io/docs/providers/google/r/compute_instance_template.html#deploying-the-latest-image)
+for additional information.
+
 Requirements
 ===
 

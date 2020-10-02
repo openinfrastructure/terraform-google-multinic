@@ -1,3 +1,12 @@
+v3.1.0 - 2020-10-02
+===
+
+ * Pin the os image to a specific version to ensure consistent behavior when
+   scaling in, scaling out, auto-healing, and across multiple terraform apply
+   runs.
+ * Replaced the `os_image` input var with `image_project`, `image_family`, and
+   `image_name`.
+
 v3.0.0 - 2020-09-30
 ===
 
