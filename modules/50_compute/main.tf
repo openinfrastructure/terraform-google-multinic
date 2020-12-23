@@ -93,8 +93,8 @@ resource "google_compute_instance_group_manager" "multinic" {
   update_policy {
     type                  = "PROACTIVE"
     minimal_action        = "REPLACE"
-    max_surge_percent     = 20
-    max_unavailable_fixed = 1
+    max_surge_fixed       = 1
+    max_unavailable_fixed = 0
     min_ready_sec         = 120
   }
 
