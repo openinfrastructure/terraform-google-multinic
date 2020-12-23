@@ -1,3 +1,8 @@
+v2.0.1 - 2020-12-23
+===
+
+ * Fix [issue/27][issue27] `target_size` should not be set with an auto scaler.
+
 v2.0.0 - 2020-09-29
 ===
 
@@ -76,3 +81,4 @@ v0.4.3
 [issue10]: https://github.com/openinfrastructure/terraform-google-multinic/issues/10
 [guest76]: https://github.com/GoogleCloudPlatform/guest-agent/issues/76
 [issue20]: https://github.com/openinfrastructure/terraform-google-multinic/issues/20
+[issue27]: https://github.com/openinfrastructure/terraform-google-multinic/issues/27
