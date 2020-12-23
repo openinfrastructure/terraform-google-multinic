@@ -51,7 +51,7 @@ variable "iperf_client" {
 }
 
 locals {
-  project_id = "multinic-networks-18d1"
+  project_id = "multinic-networks-534d"
 }
 
 # Manage the regional MIG formation

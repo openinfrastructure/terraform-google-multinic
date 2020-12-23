@@ -25,12 +25,12 @@ locals {
 module "host" {
   source = "../../modules/10_project"
 
-  folder_id       = "folders/104511770867"
+  folder_id       = "folders/504963200559"
   organization    = "openinfrastructure.co"
   org_id          = "600043944461"
   project_name    = "multinic-networks"
   billing_account = "010C18-6A318B-190124"
-  iap_members     = ["group:gcp-platform-v2-admin@openinfrastructure.co"]
+  iap_members     = ["group:gcp-platform-admin@openinfrastructure.co"]
 }
 
 # Comment this out if you already have a VPC
