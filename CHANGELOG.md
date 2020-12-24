@@ -1,3 +1,10 @@
+v3.2.0 - 2020-12-23
+===
+
+ * (#32) Modify update policy to match GKE defaults. (maxSurge=1 maxUnavailable=0)
+ * (#35) Remove nic0_cidrs, NIC0_CIDRS, nic1_cidrs, NIC1_CIDRS from 50_compute,
+   they are not used inside the instance by policy based routing.
+
 v3.1.1 - 2020-12-23
 ===
 
