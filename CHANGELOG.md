@@ -1,3 +1,8 @@
+v3.1.1 - 2020-12-23
+===
+
+ * Fix [issue/27][issue27] `target_size` should not be set with an auto scaler.
+
 v3.1.0 - 2020-10-02
 ===
 
