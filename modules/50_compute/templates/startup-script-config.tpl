@@ -11,8 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# Comma separated list of CIDRS which nic0 is used for egress.
-NIC0_CIDRS="${nic0_cidrs}"
-# Comma separated list of CIDRS which nic1 is used for egress.
-NIC1_CIDRS="${nic1_cidrs}"
