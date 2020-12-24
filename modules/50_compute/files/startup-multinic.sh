@@ -221,10 +221,10 @@ configure_policy_routing() {
   netmask1="$(stdlib::metadata_get -k instance/network-interfaces/1/subnetmask)"
   gateway1="$(stdlib::metadata_get -k instance/network-interfaces/1/gateway)"
 
-  eval "$(ipcalc -p "${ip0}/${netmask0}")"
-  net0="${ip0}/${PREFIX}"
-  eval "$(ipcalc -p "${ip1}/${netmask1}")"
-  net1="${ip1}/${PREFIX}"
+  eval "$(ipcalc --network --prefix "${ip0}/${netmask0}")"
+  net0="${NETWORK}/${PREFIX}"
+  eval "$(ipcalc --network --prefix "${ip1}/${netmask1}")"
+  net1="${NETWORK}/${PREFIX}"
 
   tmpfile="$(mktemp)"
   cat <<EOF >"$tmpfile"
@@ -236,6 +236,8 @@ fi
 if ! grep -qx '11 viaeth1' /etc/iproute2/rt_tables; then
   echo "11 viaeth1" >> /etc/iproute2/rt_tables
 fi
+
+set -x
 
 ## These are essentially the same tables, just different default routes.
 # via eth0
