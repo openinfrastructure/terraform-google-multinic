@@ -62,12 +62,10 @@ module "multinic" {
   nic0_network = local.nic0_network
   nic0_project = local.project_id
   nic0_subnet  = local.nic0_subnet
-  nic0_cidrs   = [local.nic0_netblock]
 
   nic1_network = local.nic1_network
   nic1_project = local.project_id
   nic1_subnet  = local.nic1_subnet
-  nic1_cidrs   = [local.nic1_netblock]
 
   hc_self_link = google_compute_health_check.multinic-health.self_link
   service_account_email = "multinic@${local.project_id}.iam.gserviceaccount.com"

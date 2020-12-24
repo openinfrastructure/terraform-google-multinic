@@ -71,12 +71,6 @@ variable "nic0_project" {
   type        = string
 }
 
-variable "nic0_cidrs" {
-  description = "A list of subnets in cidr notation, traffic destined for these subnets will route out nic0.  Used to configure routes. (e.g. 10.16.0.0/20)"
-  type        = list(string)
-  default     = []
-}
-
 variable "nic1_network" {
   description = "The VPC network nic1 is attached to."
   type        = string
@@ -95,12 +89,6 @@ variable "nic1_project" {
 variable "hc_self_link" {
   description = "The health check self link used for auto healing.  This health check may be reused with backend services."
   type        = string
-}
-
-variable "nic1_cidrs" {
-  description = "A list of subnets in cidr notation, traffic destined for these subnets will route out nic1.  Used to configure routes. (e.g. 10.16.0.0/20)"
-  type        = list(string)
-  default     = []
 }
 
 variable "machine_type" {

@@ -30,10 +30,6 @@ module "startup-script-lib" {
 
 data "template_file" "startup-script-config" {
   template = "${file("${path.module}/templates/startup-script-config.tpl")}"
-  vars = {
-    nic0_cidrs = join(",", var.nic0_cidrs)
-    nic1_cidrs = join(",", var.nic1_cidrs)
-  }
 }
 
 resource google_compute_instance_template "multinic" {
@@ -101,8 +97,8 @@ resource "google_compute_instance_group_manager" "multinic" {
   update_policy {
     type                  = "PROACTIVE"
     minimal_action        = "REPLACE"
-    max_surge_percent     = 20
-    max_unavailable_fixed = 1
+    max_surge_fixed       = 1
+    max_unavailable_fixed = 0
     min_ready_sec         = 120
   }
 
@@ -154,14 +150,5 @@ resource "google_compute_autoscaler" "multinic" {
       # 0.2 is a good value for a n1-highcpu-2 as of 2020-09-24
       target = var.utilization_target
     }
-
-    ## See https://cloud.google.com/monitoring/api/metrics_gcp
-    # Delta count of bytes sent over the network. Sampled every 60 seconds.
-    # After sampling, data is not visible for up to 240 seconds.
-    # metric {
-    #   name   = "compute.googleapis.com/instance/network/sent_bytes_count"
-    #   target = var.utilization_target
-    #   type   = "DELTA_PER_SECOND"
-    # }
   }
 }
