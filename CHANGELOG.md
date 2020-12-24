@@ -1,3 +1,8 @@
+v3.2.1 - 2020-12-23
+===
+
+ * (#28) Fix Error: Invalid prefix for given prefix length
+
 v3.2.0 - 2020-12-23
 ===
 
