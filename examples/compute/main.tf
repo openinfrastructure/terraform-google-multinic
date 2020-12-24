@@ -32,7 +32,7 @@ variable "preemptible" {
 }
 
 locals {
-  project_id = "multinic-networks-18d1"
+  project_id = "multinic-networks-534d"
   region     = "us-west1"
 
   # nic0's gateway routes to this netblock

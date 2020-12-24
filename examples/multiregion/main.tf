@@ -25,7 +25,7 @@ variable "preemptible" {
 }
 
 locals {
-  project_id = "multinic-networks-18d1"
+  project_id = "multinic-networks-534d"
 
   nic0_network = "main"
   nic1_network = "transit"

@@ -106,7 +106,10 @@ resource "google_compute_instance_group_manager" "multinic" {
     min_ready_sec         = 120
   }
 
-  target_size = var.num_instances
+  # See https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance_group_manager#target_size
+  # This value should always be explicitly set unless this resource is attached
+  # to an autoscaler, in which case it should never be set.
+  target_size = var.autoscale ? null : var.num_instances
 
   named_port {
     name = "hc-health"
