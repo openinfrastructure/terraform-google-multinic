@@ -264,10 +264,19 @@ ip rule add priority 1002 iif eth0 table viaeth1
 ip rule add priority 1003 iif eth1 table viaeth0
 # Flush the route cache
 ip route flush cache
+
+set +x
+
+# Save the IP rules once to be checked by the policy-routing-monitor service.
+install -v -o 0 -g 0 -m 0755 -d /var/lib/multinic/status
+ip rule show all > /var/lib/multinic/status/rules.txt
+ip route list table viaeth0 > /var/lib/multinic/status/viaeth0.txt
+ip route list table viaeth1 > /var/lib/multinic/status/viaeth1.txt
 EOF
   install -o 0 -g 0 -m 0755 "$tmpfile" /usr/sbin/policy-routing
 
   # The corresponding stop script.
+  tmpfile="$(mktemp)"
   cat <<EOF >"$tmpfile"
 #! /bin/bash
 # Stop policy routing by deleting the rules.  The custom tables remain but
@@ -297,9 +306,93 @@ RemainAfterExit=true
 WantedBy=multi-user.target
 EOF
   install -m 0644 -o 0 -g 0 "$svcfile" /etc/systemd/system/policy-routing.service
+
+  # Start the monitoring service. If the routing tables change from when policy
+  # routing was configured, then the auto-heal health check reports unhealthy.
+  # Note, only viaeth0 and viaeth1 tables are monitored because the Google OS
+  # Agent adds and removes route entries dynamically as forwarding rules are
+  # activated and de-activated for the instance.
+  tmpfile="$(mktemp)"
+  cat <<'EOF' >"$tmpfile"
+#! /bin/bash
+rules="$(mktemp)"
+viaeth0="$(mktemp)"
+viaeth1="$(mktemp)"
+
+ip rule show all > "${rules}"
+ip route list table viaeth0 > "${viaeth0}"
+ip route list table viaeth1 > "${viaeth1}"
+
+errors=0
+
+diff -U5 /var/lib/multinic/status/rules.txt "${rules}" >&2
+if [[ ${PIPESTATUS[0]} -gt 0 ]]; then
+  echo "Error: ip rule show all has changed"
+  ((errors++))
+fi
+
+diff -U5 /var/lib/multinic/status/viaeth0.txt "${viaeth0}" >&2
+if [[ ${PIPESTATUS[0]} -gt 0 ]]; then
+  echo "Error: ip route list table viaeth0 has changed"
+  ((errors++))
+fi
+
+diff -U5 /var/lib/multinic/status/viaeth1.txt "${viaeth1}" >&2
+if [[ ${PIPESTATUS[0]} -gt 0 ]]; then
+  echo "Error: ip route list table viaeth1 has changed"
+  ((errors++))
+fi
+
+if [[ $(sysctl -n net.ipv4.ip_forward) -ne 1 ]]; then
+  echo "Error: net.ipv4.ip_forward is not 1"
+  ((errors++))
+fi
+
+if [[ $(sysctl -n net.ipv4.conf.all.forwarding) -ne 1 ]]; then
+  echo "Error: net.ipv4.conf.all.forwarding is not 1"
+  ((errors++))
+fi
+
+if [[ ${errors} -gt 0 ]]; then
+  echo "Stopping hc-health.service to trigger auto-healing"
+  systemctl stop hc-health.service
+fi
+
+exit ${errors}
+EOF
+  install -o 0 -g 0 -m 0755 "$tmpfile" /usr/sbin/policy-routing-nanny
+
+  svcfile="$(mktemp)"
+  cat <<EOF >"$svcfile"
+[Unit]
+Description=policy-routing-nanny
+After=policy-routing.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/policy-routing-nanny
+PrivateTmp=true
+EOF
+  install -m 0644 -o 0 -g 0 "$svcfile" /etc/systemd/system/policy-routing-nanny.service
+
+  svcfile="$(mktemp)"
+  cat <<EOF >"$svcfile"
+[Unit]
+Description=Periodically verify policy routing has not changed
+Documentation=https://github.com/openinfrastructure/terraform-google-multinic/issues/7
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5
+
+[Install]
+WantedBy=timers.target
+EOF
+  install -m 0644 -o 0 -g 0 "$svcfile" /etc/systemd/system/policy-routing-nanny.timer
+
   systemctl daemon-reload
-  systemctl start policy-routing
-  systemctl enable policy-routing
+  systemctl start policy-routing policy-routing-nanny.timer
+  systemctl enable policy-routing policy-routing-nanny.timer
 
 return 0
 }
