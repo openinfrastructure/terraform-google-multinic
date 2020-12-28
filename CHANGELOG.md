@@ -1,3 +1,11 @@
+v3.3.0 - 2020-12-28
+===
+
+ * (#7) Monitor the health of IP forwarding.  See [PR
+   37](https://github.com/openinfrastructure/terraform-google-multinic/pull/37#)
+   for the conditions when auto-healing is triggered in response to kernel
+   routing table changes.
+
 v3.2.1 - 2020-12-23
 ===
 
