@@ -1,3 +1,9 @@
+v2.1.0 - 2021-01-13
+===
+
+ * Add `startup_script` input variable to specify a bash startup-script to
+   execute after routing is initialized.  ([#40][issue40])
+
 v2.0.1 - 2020-12-23
 ===
 
