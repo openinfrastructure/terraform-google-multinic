@@ -62,6 +62,7 @@ resource google_compute_instance_template "multinic" {
     startup-script-config = data.template_file.startup-script-config.rendered
     # Configure  Linux Policy Routing
     startup-script-custom = file("${path.module}/files/startup-multinic.sh")
+    startup-script-user   = var.startup_script
     # Deletes the route resources
     shutdown-script       = file("${path.module}/files/shutdown-multinic.sh")
   }

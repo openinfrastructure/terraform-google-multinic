@@ -25,9 +25,10 @@ locals {
 module "multinic" {
   source = "../50_compute"
 
-  num_instances = var.num_instances
-  preemptible   = var.preemptible
-  autoscale     = var.num_instances == 0 ? false : true
+  num_instances  = var.num_instances
+  preemptible    = var.preemptible
+  autoscale      = var.num_instances == 0 ? false : true
+  startup_script = var.startup_script
 
   project_id  = var.project_id
   name_prefix = "multinic-${var.region}"
