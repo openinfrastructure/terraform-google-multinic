@@ -132,7 +132,7 @@ setup_status_api() {
   install -v -o 0 -g 0 -m 0644 "${status_file}" /var/lib/multinic/status/status.json
 
   status_unit1="$(mktemp)"
-  cat <<EOF>"${status_unit1}"
+  cat <<EOF >"${status_unit1}"
 [Unit]
 Description=hc-health auto-healing endpoint (Instance is auto-healed if this unit is stopped)
 After=network.target
@@ -152,7 +152,7 @@ EOF
   install -m 0644 -o 0 -g 0 "${status_unit1}" /etc/systemd/system/hc-health.service
 
   status_unit2="$(mktemp)"
-  cat <<EOF>"${status_unit2}"
+  cat <<EOF >"${status_unit2}"
 [Unit]
 Description=hc-traffic load-balancing endpoint (Instance is taken out of service if this unit is stopped)
 After=network.target
@@ -183,7 +183,7 @@ EOF
 install_kpanic_service() {
   local tmpfile
   tmpfile="$(mktemp)"
-  cat <<EOF>"${tmpfile}"
+  cat <<EOF >"${tmpfile}"
 [Unit]
 Description=Triggers a kernel panic 1 second after being started
 
@@ -278,7 +278,7 @@ EOF
   install -o 0 -g 0 -m 0755 "$tmpfile" /usr/sbin/policy-routing-stop
 
   svcfile="$(mktemp)"
-  cat <<EOF>"$svcfile"
+  cat <<EOF >"$svcfile"
 [Unit]
 Description=Configure Policy Routing to behave as a virtual wire
 After=network-online.target
@@ -397,5 +397,8 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 fi
 
 main "$@"
+
+# Execute an user-defined startup script if present, otherwise do nothing.
+curl -H "Metadata-Flavor: Google" --silent --fail http://metadata.google.internal/computeMetadata/v1/instance/attributes/startup-script-user | bash
 
 # vim:sw=2

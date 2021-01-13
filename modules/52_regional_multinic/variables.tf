@@ -80,3 +80,9 @@ variable "service_account_email" {
   description = "The service account bound to the bridge VM instances.  Must have permission to create Route resources in both the app and core VPC networks."
   type        = string
 }
+
+variable "startup_script" {
+  description = "Startup script executed after the initilization of multinic routing.  Must be a bash script."
+  type        = string
+  default     = ""
+}
