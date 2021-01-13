@@ -24,8 +24,13 @@ variable "preemptible" {
   default     = true
 }
 
+variable "project_id" {
+  description = "Project ID containing managed resources"
+  type        = string
+}
+
 locals {
-  project_id = "multinic-networks-534d"
+  project_id = var.project_id
 
   nic0_network = "main"
   nic1_network = "transit"

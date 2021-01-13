@@ -31,8 +31,13 @@ variable "preemptible" {
   default     = true
 }
 
+variable "project_id" {
+  description = "Project ID containing managed resources"
+  type        = string
+}
+
 locals {
-  project_id = "multinic-networks-534d"
+  project_id = var.project_id
   region     = "us-west1"
 
   # nic0's gateway routes to this netblock
