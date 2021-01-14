@@ -1,3 +1,8 @@
+v3.4.1 - 2021-01-14
+===
+
+ * Set instance group size to 0 when num_instances=0 ([#43][issue43])
+
 v3.4.0 - 2021-01-13
 ===
 
