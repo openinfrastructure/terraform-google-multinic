@@ -1,3 +1,8 @@
+v2.1.1 - 2021-01-14
+===
+
+ * Set instance group size to 0 when num_instances=0 ([#43][issue43])
+
 v2.1.0 - 2021-01-13
 ===
 
@@ -88,3 +93,5 @@ v0.4.3
 [guest76]: https://github.com/GoogleCloudPlatform/guest-agent/issues/76
 [issue20]: https://github.com/openinfrastructure/terraform-google-multinic/issues/20
 [issue27]: https://github.com/openinfrastructure/terraform-google-multinic/issues/27
+[issue40]: https://github.com/openinfrastructure/terraform-google-multinic/issues/40
+[issue43]: https://github.com/openinfrastructure/terraform-google-multinic/issues/43
