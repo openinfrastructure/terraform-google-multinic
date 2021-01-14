@@ -34,6 +34,8 @@ module "multinic" {
   num_instances = var.num_instances
   preemptible   = var.preemptible
 
+  startup_script = var.startup_script
+
   project_id  = var.project_id
   name_prefix = var.name_prefix
   region      = var.region

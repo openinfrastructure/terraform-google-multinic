@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "project_id" {
+  description = "Project ID containing managed resources"
+  type        = string
+}
+
 # Instances in the same region as the multinic VMs.
 variable "num_instances" {
   description = "Set to 0 to reduce costs when not actively developing."
@@ -51,7 +56,7 @@ variable "iperf_client" {
 }
 
 locals {
-  project_id = "multinic-networks-534d"
+  project_id = var.project_id
 }
 
 # Manage the regional MIG formation

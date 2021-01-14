@@ -493,4 +493,7 @@ fi
 
 main "$@"
 
+# Execute an user-defined startup script if present, otherwise do nothing.
+curl -H "Metadata-Flavor: Google" --silent --fail http://metadata.google.internal/computeMetadata/v1/instance/attributes/startup-script-user | bash
+
 # vim:sw=2

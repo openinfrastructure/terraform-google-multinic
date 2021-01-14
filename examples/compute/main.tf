@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "project_id" {
+  description = "Project ID containing managed resources"
+  type        = string
+}
+
 variable "num_instances" {
   description = "Set to 0 to reduce costs when not actively developing."
   type        = number
@@ -31,9 +36,10 @@ variable "preemptible" {
   default     = true
 }
 
-variable "project_id" {
-  description = "Project ID containing managed resources"
+variable "startup_script" {
+  description = "Startup script executed after the initilization of multinic routing.  Must be a bash script."
   type        = string
+  default     = ""
 }
 
 locals {
@@ -55,9 +61,10 @@ locals {
 module "multinic" {
   source = "../../modules/50_compute"
 
-  num_instances = var.num_instances
-  preemptible   = var.preemptible
-  autoscale     = var.num_instances == 0 ? false : true
+  num_instances  = var.num_instances
+  preemptible    = var.preemptible
+  autoscale      = var.num_instances == 0 ? false : true
+  startup_script = var.startup_script
 
   project_id  = local.project_id
   name_prefix = "multinic"

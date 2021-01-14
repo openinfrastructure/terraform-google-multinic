@@ -144,3 +144,9 @@ variable "labels" {
     role = "multinic-router"
   }
 }
+
+variable "startup_script" {
+  description = "Startup script executed after the initilization of multinic routing.  Must be a bash script."
+  type        = string
+  default     = ""
+}

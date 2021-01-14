@@ -1,3 +1,9 @@
+v3.4.0 - 2021-01-13
+===
+
+ * Add `startup_script` input variable to specify a bash startup-script to
+   execute after routing is initialized.  ([#40][issue40])
+
 v3.3.0 - 2020-12-28
 ===
 
@@ -39,6 +45,12 @@ v3.0.0 - 2020-09-30
    [issue/23](https://github.com/openinfrastructure/terraform-google-multinic/issues/23).
  * Follow the process described in [UPGRADE.md](./docs/UPGRADE.md) when
    upgrading to this major version.
+
+v2.1.0 - 2021-01-13
+===
+
+ * Add `startup_script` input variable to specify a bash startup-script to
+   execute after routing is initialized.  ([#40][issue40])
 
 v2.0.1 - 2020-12-23
 ===
