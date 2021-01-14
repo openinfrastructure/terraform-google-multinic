@@ -22,6 +22,7 @@ locals {
   tags = concat(list("multinic-router"), var.tags)
   # Unique suffix for regional resources
   r_suffix = substr(sha1(var.region), 0, 6)
+  mig_target_size = var.num_instances == 0 ? 0 : null
 }
 
 module "startup-script-lib" {
@@ -106,7 +107,7 @@ resource "google_compute_instance_group_manager" "multinic" {
   # See https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance_group_manager#target_size
   # This value should always be explicitly set unless this resource is attached
   # to an autoscaler, in which case it should never be set.
-  target_size = var.autoscale ? null : var.num_instances
+  target_size = var.autoscale ? local.mig_target_size : var.num_instances
 
   named_port {
     name = "hc-health"
