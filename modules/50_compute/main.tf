@@ -30,7 +30,7 @@ module "startup-script-lib" {
 }
 
 data "template_file" "startup-script-config" {
-  template = "${file("${path.module}/templates/startup-script-config.tpl")}"
+  template = file("${path.module}/templates/startup-script-config.tpl")
 }
 
 resource google_compute_instance_template "multinic" {
