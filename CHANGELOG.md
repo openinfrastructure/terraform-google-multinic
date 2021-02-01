@@ -1,3 +1,16 @@
+v4.0.0 - 2021-02-01
+===
+
+ * Update the module to Terraform 0.13 compatibility.
+ * See [Upgrade Notes](./docs/UPGRADE.md) for TF 0.13 instructions.
+
+v3.5.0 - 2021-02-01
+===
+
+ * Last version compatible with Terraform 0.12
+ * Update Project Factory and Network modules for Terraform 0.13 upgrade.
+ * See [Upgrade Notes](./docs/UPGRADE.md) for TF 0.13 instructions.
+
 v3.4.1 - 2021-01-14
 ===
 
