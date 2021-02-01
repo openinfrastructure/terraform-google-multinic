@@ -1,3 +1,11 @@
+Terraform 0.13 Upgrade
+===
+
+ 1. Use Terraform 0.12 to init, plan, and apply version 3.x of this module.
+ 2. Use Terraform 0.13 to init, plan, and apply the same 3.x version.
+ 3. Update this module to version 4.x.
+ 4. Use Terraform 0.13 to init, plan, and apply 4.x.
+
 Upgrade Procedure
 ===
 
