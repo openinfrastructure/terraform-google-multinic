@@ -65,6 +65,7 @@ module "multinic-us-west1-v3" {
   num_instances  = var.num_instances
   preemptible    = var.preemptible
   startup_script = var.startup_script
+  autoscale      = var.num_instances == 0 ? false : true
 
   project_id  = local.project_id
   region      = "us-west1"
@@ -96,6 +97,7 @@ module "multinic-us-west2-v3" {
   num_instances  = var.num_instances
   preemptible    = var.preemptible
   startup_script = var.startup_script
+  autoscale      = var.num_instances == 0 ? false : true
 
   project_id  = local.project_id
   region      = "us-west2"
