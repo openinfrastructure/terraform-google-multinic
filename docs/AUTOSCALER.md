@@ -1,4 +1,4 @@
-Autoscaler
+Managed Instance Group Autoscaler
 ===
 
 Summary
